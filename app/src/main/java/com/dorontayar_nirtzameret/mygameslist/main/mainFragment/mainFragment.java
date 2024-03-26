@@ -2,6 +2,7 @@ package com.dorontayar_nirtzameret.mygameslist.main.mainFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class mainFragment extends Fragment {
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,8 +34,11 @@ public class mainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         // Initialize the BottomNavigationView
         BottomNavigationView navView = view.findViewById(R.id.nav_view);
+        navView.setItemIconTintList(null);
+        navView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
         // Set up navigation with NavController
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_fragment_main);

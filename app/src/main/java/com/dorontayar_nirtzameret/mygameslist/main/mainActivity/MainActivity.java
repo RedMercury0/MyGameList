@@ -1,12 +1,14 @@
 package com.dorontayar_nirtzameret.mygameslist.main.mainActivity;
 
 import android.os.Bundle;
+import android.view.Window;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
 import com.dorontayar_nirtzameret.mygameslist.main.loginFragment.loginFragment;
 import com.dorontayar_nirtzameret.mygameslist.main.mainFragment.mainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // hides the title action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+
     }
 
     @Override
@@ -34,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Observe changes in authentication state and navigate accordingly
         observeAuthenticationState();
+
+
+
     }
 
     private void observeAuthenticationState() {
