@@ -21,14 +21,14 @@
         android:id="@+id/mainFragment"
         android:name="com.dorontayar_nirtzameret.mygameslist.main.mainFragment.mainFragment"
         android:label="mainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.dorontayar_nirtzameret.mygameslist.main.registerFragment.registerFragment"
-        android:label="registerFragment" >
+        android:label="registerFragment">
         <action
             android:id="@+id/action_registerFragment_to_mainFragment"
             app:destination="@id/mainFragment"
-            tools:layout="@layout/fragment_register"/>
+            tools:layout="@layout/fragment_register" />
     </fragment>
 </navigation>
