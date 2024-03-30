@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/maincolorapp">
+    android:background="@color/colorcomponnent">
 
     <TextView
         android:id="@+id/textView"
@@ -15,7 +15,7 @@
         android:layout_marginTop="40dp"
         android:fontFamily="@font/productsansmedium"
         android:text="Home"
-        android:textColor="@color/textcolorWhite"
+        android:textColor="@color/purple_500"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/productsansmedium"
                         android:text="2018"
-                        android:textColor="#fff" />
+                        android:textColor="@color/purple_500" />
 
                 </RelativeLayout>
 
@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/productsansmedium"
                         android:text="2019"
-                        android:textColor="#fff" />
+                        android:textColor="@color/purple_500" />
 
                 </RelativeLayout>
 
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/productsansmedium"
                         android:text="2020"
-                        android:textColor="#fff" />
+                        android:textColor="@color/purple_500" />
 
                 </RelativeLayout>
 
@@ -156,7 +156,7 @@
             android:fontFamily="@font/productsansmedium"
             android:letterSpacing="0.15"
             android:text="• Popular"
-            android:textColor="@color/colorcomponnent"
+            android:textColor="@color/purple_500"
             android:textSize="14sp" />
 
     </RelativeLayout>
@@ -180,7 +180,7 @@
         android:letterSpacing="0.15"
         android:paddingLeft="20dp"
         android:text="• The newest"
-        android:textColor="@color/colorcomponnent"
+        android:textColor="@color/purple_500"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />

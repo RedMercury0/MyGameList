@@ -1,25 +1,20 @@
 package com.dorontayar_nirtzameret.mygameslist.main.mainActivity;
 
 import android.os.Bundle;
-import android.view.Window;
-
-import com.dorontayar_nirtzameret.mygameslist.R;
-import com.dorontayar_nirtzameret.mygameslist.main.loginFragment.loginFragment;
-import com.dorontayar_nirtzameret.mygameslist.main.mainFragment.mainFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.dorontayar_nirtzameret.mygameslist.databinding.ActivityMainBinding;
+import com.dorontayar_nirtzameret.mygameslist.R;
+import com.dorontayar_nirtzameret.mygameslist.network.ApiManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +25,14 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        // Initialize ApiManager
+        ApiManager.initialize(getApplicationContext());
 
+        // Initialize ViewModel
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        // Call preloadData method to fetch data
+        mainViewModel.preloadData();
     }
 
     @Override
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Observe changes in authentication state and navigate accordingly
         observeAuthenticationState();
-
 
 
     }
