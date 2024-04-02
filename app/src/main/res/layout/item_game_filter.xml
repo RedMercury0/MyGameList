@@ -72,14 +72,13 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:layout_alignParentStart="true"
-            android:textColor="@color/textcolorWhite"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/title"
             android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/productsansmedium"
-
             android:text="King war" />
 
 
