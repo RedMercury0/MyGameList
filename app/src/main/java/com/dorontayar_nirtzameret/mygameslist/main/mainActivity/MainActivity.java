@@ -4,13 +4,13 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
 import com.dorontayar_nirtzameret.mygameslist.network.ApiManager;
-
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
@@ -31,20 +31,27 @@ public class MainActivity extends AppCompatActivity {
         // Initialize ViewModel
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
+        // Observe data loading completion
+        mainViewModel.getDataLoadingComplete().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isComplete) {
+                if (isComplete) {
+                    // Data loading is complete, navigate to main fragment and load its UI
+                    navigateToMainFragment();
+                }
+            }
+        });
+
         // Call preloadData method to fetch data
         mainViewModel.preloadData();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void navigateToMainFragment() {
         // Find the NavController associated with the NavHostFragment
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
         // Observe changes in authentication state and navigate accordingly
         observeAuthenticationState();
-
-
     }
 
     private void observeAuthenticationState() {
@@ -62,7 +69,3 @@ public class MainActivity extends AppCompatActivity {
         return false; // Replace with your authentication logic
     }
 }
-
-
-
-
