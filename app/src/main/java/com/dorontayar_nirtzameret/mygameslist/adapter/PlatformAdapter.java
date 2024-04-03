@@ -1,11 +1,11 @@
 package com.dorontayar_nirtzameret.mygameslist.adapter;
 
 
-
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,13 +14,16 @@ import com.dorontayar_nirtzameret.mygameslist.R;
 import com.dorontayar_nirtzameret.mygameslist.model.platformModel.Result;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHolder> {
 
     private ArrayList<Result> items;
-    private OnClickAdapterListner itemClick;
+    private OnClickAdapterListener itemClick;
 
-    public interface OnClickAdapterListner {
+    public PlatformAdapter(PlatformAdapter.OnClickAdapterListener itemClick) {this.itemClick = itemClick;}
+
+    public interface OnClickAdapterListener {
         void onClick(Result game, ArrayList<Result> items);
     }
 
@@ -29,8 +32,8 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
         return items != null ? items.size() : 0;
     }
 
-    public void setPosts(ArrayList<Result> items) {
-        this.items = items;
+    public void setPosts(List<Result> items) {
+        this.items = new ArrayList<>(items);
         notifyDataSetChanged();
     }
 
@@ -40,7 +43,7 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_geners, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_type, parent, false);
         return new ViewHolder(view);
     }
 
@@ -67,7 +70,7 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView titleBack;
+        RelativeLayout titleBack;
         TextView titleType;
 
         public ViewHolder(View view) {

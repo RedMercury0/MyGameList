@@ -34,6 +34,9 @@ public interface RawgApiService {
     @GET("/api/games")
     Single<SearchModel> searchGamesByPlatform(@Query("page_size") String pageSize, @Query("search") String query, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
 
+    @GET("/api/games")
+    Single<SearchModel> searchGamesByPlatformAndGenre(@Query("page_size") String pageSize, @Query("search") String query,@Query("genres") String genres, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
+
     // Endpoint for retrieving genres
     @GET("/api/genres")
     Single<GenresModel> getGenres(@Query("key") String apiKey);

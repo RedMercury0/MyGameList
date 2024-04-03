@@ -18,10 +18,12 @@ import java.util.List;
 public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder> {
 
     private ArrayList<Result> items;
-    private OnClickAdapterListner itemClick;
+    private OnClickAdapterListener itemClick;
+
+    public GenersAdapter(GenersAdapter.OnClickAdapterListener itemClick) {this.itemClick = itemClick;}
 
     // Interface for item click listener
-    public interface OnClickAdapterListner {
+    public interface OnClickAdapterListener {
         void onClick(Result game, ArrayList<Result> items);
     }
 
@@ -44,7 +46,7 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
     // Inflates the item views
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_geners, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_type, parent, false);
         return new ViewHolder(view);
     }
 

@@ -28,7 +28,6 @@ public class ApiManager {
     public static Single<InfoGame> getGameInfo(Context context, String name, String apiKey) {
         return apiService.getGameInfo(name, apiKey);
     }
-
     // Method to search games
     public static Single<SearchModel> searchGames(Context context, String pageSize, String query, int page, String apiKey) {
         return apiService.searchGames(pageSize, query, page, apiKey);
@@ -42,6 +41,10 @@ public class ApiManager {
     // Method to search games by platform
     public static Single<SearchModel> searchGamesByPlatform(Context context, String pageSize, String query, String platforms, int page, String apiKey) {
         return apiService.searchGamesByPlatform(pageSize, query, platforms, page, apiKey);
+    }
+    // Method to search games by platform and genre
+    public static Single<SearchModel> searchGamesByPlatformAndGenre(Context context, String pageSize, String query, String platforms, String genres, int page, String apiKey) {
+        return apiService.searchGamesByPlatformAndGenre(pageSize, query, platforms, genres, page, apiKey);
     }
 
     // Method to get genres

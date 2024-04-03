@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialogContainer"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="380dp"
     android:background="@drawable/cornerdrawable"
     android:gravity="center"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
@@ -33,19 +33,10 @@
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <!--    <NumberPicker-->
-
-    <!--        android:theme="@style/AppTheme.Picker"-->
-    <!--        android:layout_alignParentEnd="true"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:layout_marginRight="5dp"-->
-    <!--        android:layout_below="@id/textinput"-->
-    <!--        android:id="@+id/numberpicker"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content" />-->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/textinput"
         android:id="@+id/platformRec"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -54,6 +45,7 @@
         android:layout_height="40dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/platformRec"
+        android:orientation="horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
@@ -61,11 +53,21 @@
         android:id="@+id/genresRec"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/genresRec"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/yearsRec"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
     <Button
         android:id="@+id/findButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/genresRec"
+        android:layout_below="@id/yearsRec"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:background="@drawable/round_corner_button"
