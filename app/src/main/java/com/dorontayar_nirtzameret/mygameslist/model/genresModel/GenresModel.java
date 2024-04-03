@@ -7,12 +7,12 @@ public class GenresModel {
     private String description;
     private Object next;
     private Object previous;
-    private List<Result> results;
+    private List<GenresResult> results;
     private String seo_description;
     private String seo_h1;
     private String seo_title;
 
-    public GenresModel(int count, String description, Object next, Object previous, List<Result> results, String seo_description, String seo_h1, String seo_title) {
+    public GenresModel(int count, String description, Object next, Object previous, List<GenresResult> results, String seo_description, String seo_h1, String seo_title) {
         this.count = count;
         this.description = description;
         this.next = next;
@@ -55,12 +55,12 @@ public class GenresModel {
         this.previous = previous;
     }
 
-    public List<Result> getResults() {
+    public List<GenresResult> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setResults(List<GenresResult> genresResults) {
+        this.results = genresResults;
     }
 
     public String getSeo_description() {

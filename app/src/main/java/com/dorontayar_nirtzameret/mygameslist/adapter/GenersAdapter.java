@@ -10,21 +10,21 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
-import com.dorontayar_nirtzameret.mygameslist.model.genresModel.Result;
+import com.dorontayar_nirtzameret.mygameslist.model.genresModel.GenresResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder> {
 
-    private ArrayList<Result> items;
+    private ArrayList<GenresResult> items;
     private OnClickAdapterListener itemClick;
 
     public GenersAdapter(GenersAdapter.OnClickAdapterListener itemClick) {this.itemClick = itemClick;}
 
     // Interface for item click listener
     public interface OnClickAdapterListener {
-        void onClick(Result game, ArrayList<Result> items);
+        void onClick(GenresResult game, ArrayList<GenresResult> items);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
     }
 
     // Setter for the list of items
-    public void setPosts(List<Result> items) {
+    public void setPosts(List<GenresResult> items) {
         this.items = new ArrayList<>(items);
         notifyDataSetChanged();
     }
 
     // Getter for the list of items
-    public ArrayList<Result> getPost() {
+    public ArrayList<GenresResult> getPost() {
         return items;
     }
 
@@ -53,7 +53,7 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
     // Binds each item in the ArrayList to a view
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Result model = items.get(position);
+        final GenresResult model = items.get(position);
         holder.titleType.setText(model.getName());
         holder.titleBack.setBackgroundColor(model.isClicked() ? Color.parseColor("#c43e00") : Color.parseColor("#342A24"));
 

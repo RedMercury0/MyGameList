@@ -7,9 +7,9 @@ public class PlatformModel {
     private int count;
     private String next;
     private Object previous;
-    private List<Result> results;
+    private List<PlatformResult> results;
 
-    public PlatformModel(int count, String next, Object previous, List<Result> results) {
+    public PlatformModel(int count, String next, Object previous, List<PlatformResult> results) {
         this.count = count;
         this.next = next;
         this.previous = previous;
@@ -40,11 +40,11 @@ public class PlatformModel {
         this.previous = previous;
     }
 
-    public List<Result> getResults() {
+    public List<PlatformResult> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<PlatformResult> results) {
         this.results = results;
     }
 }

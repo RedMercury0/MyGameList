@@ -14,10 +14,10 @@ public interface RawgApiService {
 
     // Endpoints for retrieving popular games
     @GET("/api/games")
-    Single<TopGames> getPopularGames(@Query("dates") String dates,
-                                     @Query("ordering") String ordering,
-                                     @Query("key") String apiKey,
-                                     @Query("page") int page);
+    Single<TopGames> getGames(@Query("dates") String dates,
+                              @Query("ordering") String ordering,
+                              @Query("key") String apiKey,
+                              @Query("page") int page);
 
 
     // Endpoint for retrieving game information by name
@@ -26,16 +26,16 @@ public interface RawgApiService {
 
     // Endpoints for searching games
     @GET("/api/games")
-    Single<SearchModel> searchGames(@Query("page_size") String pageSize, @Query("search") String query, @Query("page") int page, @Query("key") String apiKey);
+    Single<SearchModel> searchGames(@Query("search_precise") Boolean searchPrecise,@Query("page_size") String pageSize, @Query("search") String query, @Query("page") int page, @Query("key") String apiKey);
 
     @GET("/api/games")
-    Single<SearchModel> searchGamesByGenre(@Query("page_size") String pageSize, @Query("search") String query, @Query("genres") String genres, @Query("page") int page, @Query("key") String apiKey);
+    Single<SearchModel> searchGamesByGenre(@Query("search_precise") Boolean searchPrecise,@Query("page_size") String pageSize, @Query("search") String query, @Query("genres") String genres, @Query("page") int page, @Query("key") String apiKey);
 
     @GET("/api/games")
-    Single<SearchModel> searchGamesByPlatform(@Query("page_size") String pageSize, @Query("search") String query, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
+    Single<SearchModel> searchGamesByPlatform(@Query("search_precise") Boolean searchPrecise,@Query("page_size") String pageSize, @Query("search") String query, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
 
     @GET("/api/games")
-    Single<SearchModel> searchGamesByPlatformAndGenre(@Query("page_size") String pageSize, @Query("search") String query,@Query("genres") String genres, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
+    Single<SearchModel> searchGamesByFilters(@Query("search_precise") Boolean searchPrecise,@Query("page_size") String pageSize, @Query("search") String query,@Query("genres") String genres, @Query("platforms") String platforms, @Query("page") int page, @Query("key") String apiKey);
 
     // Endpoint for retrieving genres
     @GET("/api/genres")

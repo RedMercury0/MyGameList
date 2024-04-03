@@ -11,20 +11,20 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
-import com.dorontayar_nirtzameret.mygameslist.model.platformModel.Result;
+import com.dorontayar_nirtzameret.mygameslist.model.platformModel.PlatformResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHolder> {
 
-    private ArrayList<Result> items;
+    private ArrayList<PlatformResult> items;
     private OnClickAdapterListener itemClick;
 
     public PlatformAdapter(PlatformAdapter.OnClickAdapterListener itemClick) {this.itemClick = itemClick;}
 
     public interface OnClickAdapterListener {
-        void onClick(Result game, ArrayList<Result> items);
+        void onClick(PlatformResult game, ArrayList<PlatformResult> items);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
         return items != null ? items.size() : 0;
     }
 
-    public void setPosts(List<Result> items) {
+    public void setPosts(List<PlatformResult> items) {
         this.items = new ArrayList<>(items);
         notifyDataSetChanged();
     }
 
-    public ArrayList<Result> getPost() {
+    public ArrayList<PlatformResult> getPost() {
         return this.items;
     }
 
@@ -49,7 +49,7 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Result model = items.get(position);
+        PlatformResult model = items.get(position);
         holder.titleType.setText(model.getName());
 
         if (model.isClicked()) {
@@ -79,4 +79,5 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
             titleType = view.findViewById(R.id.titleType);
         }
     }
+
 }

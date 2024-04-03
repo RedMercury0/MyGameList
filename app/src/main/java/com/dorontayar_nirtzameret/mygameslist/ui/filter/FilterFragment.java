@@ -22,7 +22,9 @@ import com.dorontayar_nirtzameret.mygameslist.adapter.FilterAdapter;
 import com.dorontayar_nirtzameret.mygameslist.adapter.GenersAdapter;
 import com.dorontayar_nirtzameret.mygameslist.adapter.PlatformAdapter;
 import com.dorontayar_nirtzameret.mygameslist.model.genresModel.GenresModel;
+import com.dorontayar_nirtzameret.mygameslist.model.genresModel.GenresResult;
 import com.dorontayar_nirtzameret.mygameslist.model.platformModel.PlatformModel;
+import com.dorontayar_nirtzameret.mygameslist.model.platformModel.PlatformResult;
 import com.dorontayar_nirtzameret.mygameslist.model.searchModel.Result;
 import com.dorontayar_nirtzameret.mygameslist.model.searchModel.SearchModel;
 import com.dorontayar_nirtzameret.mygameslist.network.ApiManager;
@@ -44,9 +46,9 @@ public class FilterFragment extends Fragment {
     private RecyclerView recyclerView;
     private LottieAnimationView avFromCode;
     private TextView gameFind;
-    String apiKey;
-    String selectedGenres = "";
-    String selectedPlatforms = "";
+    private String apiKey;
+    private List<GenresResult> selectedGenres = new ArrayList<>();
+    private List<PlatformResult> selectedPlatforms = new ArrayList<>();
 
     public FilterFragment() {
         // Required empty public constructor
@@ -93,27 +95,27 @@ public class FilterFragment extends Fragment {
                 // Handle item click event
             }
         });
-        // Initialize GenersAdapter with item click listener
+        // Initialize GenresAdapter with item click listener
         genersAdapter = new GenersAdapter(new GenersAdapter.OnClickAdapterListener() {
             @Override
-            public void onClick(com.dorontayar_nirtzameret.mygameslist.model.genresModel.Result item, ArrayList<com.dorontayar_nirtzameret.mygameslist.model.genresModel.Result> items) {
+            public void onClick(GenresResult item, ArrayList<GenresResult> items) {
                 // Handle item click event for genres
                 item.setClicked(!item.isClicked());
+                onGenreClicked(item);
                 // Notify the adapter of the dataset change
                 genersAdapter.notifyDataSetChanged();
-                // You can also update the selectedGenres variable here based on the clicked item
             }
         });
 
         // Initialize PlatformAdapter
         platformAdapter = new PlatformAdapter(new PlatformAdapter.OnClickAdapterListener() {
             @Override
-            public void onClick(com.dorontayar_nirtzameret.mygameslist.model.platformModel.Result item, ArrayList<com.dorontayar_nirtzameret.mygameslist.model.platformModel.Result> items) {
-                // Handle item click event for genres
+            public void onClick(PlatformResult item, ArrayList<PlatformResult> items) {
+                // Handle item click event for platform
                 item.setClicked(!item.isClicked());
+                onPlatformClicked(item);
                 // Notify the adapter of the dataset change
                 platformAdapter.notifyDataSetChanged();
-                // You can also update the selectedGenres variable here based on the clicked item
             }
         });
 
@@ -126,7 +128,7 @@ public class FilterFragment extends Fragment {
 
     }
 
-    // Method to open bottom sheet dialog for searching
+    // Open the bottom sheet dialog for searching
     private void openBottomSheetDialog() {
         // Inflate the bottom sheet layout
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottomsheetdialog, null);
@@ -159,8 +161,11 @@ public class FilterFragment extends Fragment {
                 EditText searchEditText = bottomSheetView.findViewById(R.id.textInsert);
                 String searchText = searchEditText.getText().toString();
 
-                // Perform search based on searchText
-                performSearch(searchText, 1);
+                // Perform search based on searchText and filters
+                if(!searchText.isEmpty()){
+                    performSearch(searchText, 1);
+                }
+
 
                 // Dismiss the dialog
                 bottomSheetDialog.dismiss();
@@ -172,7 +177,7 @@ public class FilterFragment extends Fragment {
     }
 
 
-    // Method to fetch genres data from API
+    // Fetch genres data from API
     private void fetchGenres() {
         // Make API call to get genres
         ApiManager.getGenres(getContext(), apiKey)
@@ -198,7 +203,7 @@ public class FilterFragment extends Fragment {
                 });
     }
 
-    // Method to fetch platforms data from API
+    // Fetch platforms data from API
     private void fetchPlatforms() {
         // Make API call to get platforms
         ApiManager.getPlatforms(getContext(), apiKey)
@@ -215,7 +220,7 @@ public class FilterFragment extends Fragment {
                         Log.e("platformLOG", "fetch platforms ");
                         // Update PlatformAdapter with platforms data
                         platformAdapter.setPosts(platformModel.getResults());
-                        List<com.dorontayar_nirtzameret.mygameslist.model.platformModel.Result> listResultsPlat =platformModel.getResults();
+                        List<PlatformResult> listResultsPlat =platformModel.getResults();
                         Log.e("platformLOG", listResultsPlat.get(1).getName());
                     }
 
@@ -228,11 +233,12 @@ public class FilterFragment extends Fragment {
     }
 
 
-    // Method to perform search based on the entered text, selected genres, and selected platforms
-    private void performSearch(String searchText,int page) {
+    // Perform search based on the entered text, selected genres, and selected platforms
+    private void performSearch(String searchText, int page) {
         // Make API call to search for games
-        //ApiManager.searchGamesByPlatformAndGenre(getContext(), "25", searchText, selectedPlatforms, selectedGenres, page, apiKey)
-        ApiManager.searchGames(getContext(), "25", searchText,page, apiKey)
+
+        if (selectedGenres.isEmpty() && selectedPlatforms.isEmpty()){
+            ApiManager.searchGames(getContext(), "25", searchText,page, apiKey)
 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -246,6 +252,153 @@ public class FilterFragment extends Fragment {
                     public void onSuccess(@NonNull SearchModel searchModel) {
                         // Update the RecyclerView with search results
                         filterAdapter.setPosts(searchModel.getResults());
+
+                        // Clear filtering selection
+                        clearSelectedFilters();
+
+                        // Hide the LottieAnimationView and TextView
+                        hideGameFinder();
+
+                        // Dismiss the dialog if necessary
+                        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+                            bottomSheetDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        // Handle error
+                        Log.e(TAG, "Search error: " + e.getMessage());
+                    }
+                });
+        }
+        else if (selectedGenres.isEmpty() && !selectedPlatforms.isEmpty()){
+
+            ApiManager.searchGamesByPlatform(getContext(), "25", searchText, getPlatformsId(), page, apiKey)
+
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<SearchModel>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+                            // Disposable
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull SearchModel searchModel) {
+                            // Update the RecyclerView with search results
+                            filterAdapter.setPosts(searchModel.getResults());
+
+                            // Clear filtering selection
+                            clearSelectedFilters();
+
+                            // Hide the LottieAnimationView and TextView
+                            hideGameFinder();
+
+                            // Dismiss the dialog if necessary
+                            if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+                                bottomSheetDialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            // Handle error
+                            Log.e(TAG, "Search error: " + e.getMessage());
+                        }
+                    });
+        } else if (!selectedGenres.isEmpty() && selectedPlatforms.isEmpty()) {
+            ApiManager.searchGamesByGenre(getContext(), "25", searchText, getGenresId(), page, apiKey)
+
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<SearchModel>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+                            // Disposable
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull SearchModel searchModel) {
+                            // Update the RecyclerView with search results
+                            filterAdapter.setPosts(searchModel.getResults());
+
+                            // Clear filtering selection
+                            clearSelectedFilters();
+
+                            // Hide the LottieAnimationView and TextView
+                            hideGameFinder();
+
+                            // Dismiss the dialog if necessary
+                            if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+                                bottomSheetDialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            // Handle error
+                            Log.e(TAG, "Search error: " + e.getMessage());
+                        }
+                    });
+            }else {
+            ApiManager.searchGamesByFilters(getContext(), "25", searchText, getPlatformsId(),getGenresId(), page, apiKey)
+
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<SearchModel>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+                            // Disposable
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull SearchModel searchModel) {
+                            // Update the RecyclerView with search results
+                            filterAdapter.setPosts(searchModel.getResults());
+
+                            // Clear filtering selection
+                            clearSelectedFilters();
+
+                            // Hide the LottieAnimationView and TextView
+                            hideGameFinder();
+
+                            // Dismiss the dialog if necessary
+                            if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+                                bottomSheetDialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            // Handle error
+                            Log.e(TAG, "Search error: " + e.getMessage());
+                        }
+                    });
+        }
+
+
+    }
+    // Perform search based on the entered text, selected genres, and selected platforms
+    private void performSearchByFilters(String searchText,String selectedPlatformsFilter,String selectedGenresFilter,int page) {
+        // Make API call to search for games with geners and platform filters
+        ApiManager.searchGamesByFilters(getContext(), "25", searchText, selectedPlatformsFilter, selectedGenresFilter, page, apiKey)
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<SearchModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        // Disposable
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull SearchModel searchModel) {
+                        // Update the RecyclerView with search results
+                        filterAdapter.setPosts(searchModel.getResults());
+
+                        // Clear filtering selection
+                        clearSelectedFilters();
 
                         // Hide the LottieAnimationView and TextView
                         hideGameFinder();
@@ -263,7 +416,6 @@ public class FilterFragment extends Fragment {
                     }
                 });
     }
-
     private void hideGameFinder() {
         if (avFromCode != null) {
             avFromCode.setVisibility(View.INVISIBLE);
@@ -272,6 +424,70 @@ public class FilterFragment extends Fragment {
             gameFind.setVisibility(View.INVISIBLE);
         }
     }
+
+    // Handle item click in GenresAdapter and PlatformAdapter
+    private void onGenreClicked(GenresResult genre) {
+        if (selectedGenres.contains(genre)) {
+            selectedGenres.remove(genre);
+        } else {
+            selectedGenres.add(genre);
+        }
+    }
+    private void onPlatformClicked(PlatformResult platform) {
+        if (selectedPlatforms.contains(platform)) {
+            selectedPlatforms.remove(platform);
+        } else {
+            selectedPlatforms.add(platform);
+        }
+    }
+
+    // Get the selected Id for genres and platforms
+    private String getGenresId(){
+        StringBuilder genresString = new StringBuilder();
+        for (GenresResult item : selectedGenres){
+            genresString.append(item.getId()).append(", ");
+        }
+        if (genresString.length() > 0) {
+            genresString.setLength(genresString.length() - 2);
+        }
+        return genresString.toString();
+    }
+
+    private String getPlatformsId(){
+        StringBuilder platformsString = new StringBuilder();
+        for (PlatformResult item : selectedPlatforms){
+            platformsString.append(item.getId()).append(", ");
+        }
+        if (platformsString.length() > 0) {
+            platformsString.setLength(platformsString.length() - 2);
+        }
+        return platformsString.toString();
+    }
+
+    // Clear all selected items
+    private void clearSelectedFilters() {
+        if (genersAdapter != null) {
+            selectedGenres.clear();
+
+            ArrayList<GenresResult> genres = genersAdapter.getPost();
+            if (genres != null) {
+                for (GenresResult genre : genres) {
+                    genre.setClicked(false);
+                }
+            }
+        }
+
+        if (platformAdapter != null) {
+            selectedPlatforms.clear();
+            ArrayList<PlatformResult> platforms = platformAdapter.getPost();
+            if (platforms != null) {
+                for (PlatformResult platform : platforms) {
+                    platform.setClicked(false);
+                }
+            }
+        }
+    }
+
 }
 
 
