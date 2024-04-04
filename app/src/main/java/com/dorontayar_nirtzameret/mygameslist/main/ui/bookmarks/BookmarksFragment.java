@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.ui.bookmarks;
+package com.dorontayar_nirtzameret.mygameslist.main.ui.bookmarks;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

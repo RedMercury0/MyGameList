@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.previewActivity.PreviewGameActivity">
+        <activity android:name=".main.previewActivity.PreviewGameActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>

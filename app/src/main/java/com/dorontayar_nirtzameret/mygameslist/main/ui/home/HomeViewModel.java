@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.ui.home;
+package com.dorontayar_nirtzameret.mygameslist.main.ui.home;
 
 import android.app.Application;
 import android.content.Context;

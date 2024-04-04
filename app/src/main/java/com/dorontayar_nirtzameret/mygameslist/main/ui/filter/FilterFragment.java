@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.ui.filter;
+package com.dorontayar_nirtzameret.mygameslist.main.ui.filter;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 

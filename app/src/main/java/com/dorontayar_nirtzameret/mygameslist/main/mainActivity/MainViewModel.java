@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.dorontayar_nirtzameret.mygameslist.ui.home.HomeViewModel;
+import com.dorontayar_nirtzameret.mygameslist.main.ui.home.HomeViewModel;
 
 
 public class MainViewModel extends AndroidViewModel {

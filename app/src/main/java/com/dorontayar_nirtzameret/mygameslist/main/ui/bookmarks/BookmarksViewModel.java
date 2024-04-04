@@ -1,16 +1,16 @@
-package com.dorontayar_nirtzameret.mygameslist.ui.filter;
+package com.dorontayar_nirtzameret.mygameslist.main.ui.bookmarks;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class FilterViewModel extends ViewModel {
+public class BookmarksViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public FilterViewModel() {
+    public BookmarksViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is filter fragment");
+        mText.setValue("This is bookmarks fragment");
     }
 
     public LiveData<String> getText() {

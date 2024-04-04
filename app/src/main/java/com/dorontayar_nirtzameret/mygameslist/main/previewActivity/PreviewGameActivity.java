@@ -5,23 +5,25 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.text.HtmlCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
+import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.Genre;
+import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.ParentPlatform;
 import com.dorontayar_nirtzameret.mygameslist.model.detailModel.InfoGame;
+import com.dorontayar_nirtzameret.mygameslist.model.detailModel.Publisher;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
-
-import java.util.Objects;
+import com.squareup.picasso.Picasso;
 
 public class PreviewGameActivity extends AppCompatActivity {
 
@@ -29,11 +31,13 @@ public class PreviewGameActivity extends AppCompatActivity {
     private ImageView backImage;
     private VideoView clipGame;
     private ViewPager2 viewPager;
-    private RecyclerView genresGame;
-    private RelativeLayout cardstates;
     private Toolbar toolbar;
-    private TextView titleGameToolbar;
+    private TextView titleGameToolbar,titleGame,
+            rateGameToolbar,rateGame,releaseDate,description,platforms,genres,publisher;
+
+
     private InfoGame infoGame;
+
     private Gson gson;
     private String gameData;
     private String gameID;
@@ -75,17 +79,20 @@ public class PreviewGameActivity extends AppCompatActivity {
         appBarLayout = findViewById(R.id.appbarlayout);
         clipGame = findViewById(R.id.clipGame);
         viewPager = findViewById(R.id.viewPager);
-        genresGame = findViewById(R.id.genresGame);
-        cardstates = findViewById(R.id.cardstates);
         toolbar = findViewById(R.id.toolbar);
         backImage = findViewById(R.id.back);
         titleGameToolbar = findViewById(R.id.titleGameToolbar);
+        titleGame = findViewById(R.id.titleGame);
+        rateGameToolbar = findViewById(R.id.rateGameToolbar);
+        rateGame = findViewById(R.id.rateGame);
+        releaseDate = findViewById(R.id.releaseDate);
+        description = findViewById(R.id.description);
+        platforms = findViewById(R.id.platforms);
+        genres = findViewById(R.id.genres);
+        publisher= findViewById(R.id.publisher);
     }
 
     private void setupUI() {
-        //setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
 
         // Set navigation icon color filter
         setNavigationIconColorFilter();
@@ -94,7 +101,73 @@ public class PreviewGameActivity extends AppCompatActivity {
         setupAppBarLayoutListener();
 
         // Set up views with data
+        // Game title
         titleGameToolbar.setText(infoGame.getName());
+        //titleGame.setText(infoGame.getName());
+
+        // Game image
+        Picasso.get()
+                .load(infoGame.getBackground_image())
+                .resize(750, 500)
+                //Todo add error loading
+                .into(backImage);
+
+        // Game rating
+        rateGameToolbar.setText(Double.toString(infoGame.getRating()));
+        //rateGame.setText(Double.toString(infoGame.getRating()));
+
+        // Game release date
+        releaseDate.setText(infoGame.getReleased());
+
+        // Game Description
+        //description.setText(infoGame.getDescription());
+        description.setText(HtmlCompat.fromHtml(infoGame.getDescription(), HtmlCompat.FROM_HTML_MODE_COMPACT));
+
+
+        // Game platforms
+        StringBuilder platformsString = new StringBuilder();
+        platformsString.append("Platforms: ");
+        for (ParentPlatform platformItem : infoGame.getParent_platforms()) {
+            platformsString.append(platformItem.getPlatform().getName()).append(", ");
+        }
+
+        if (platformsString.length() > 2) {
+            platformsString.setLength(platformsString.length() - 2);
+        }
+        platforms.setText(platformsString);
+
+        // Game genres
+        StringBuilder genresString = new StringBuilder();
+        genresString.append("Genres: ");
+        for (Genre genreItem : infoGame.getGenres()) {
+            genresString.append(genreItem.getName()).append(", ");
+        }
+
+        if (genresString.length() > 2) {
+            genresString.setLength(genresString.length() - 2);
+        }
+        genres.setText(genresString);
+
+        // Game publisher
+        StringBuilder publisherString = new StringBuilder();
+        publisherString.append("Publisher: ");
+        for (Publisher publisherItem : infoGame.getPublishers()) {
+            publisherString.append(publisherItem.getName()).append(", ");
+        }
+
+        if (publisherString.length() > 2) {
+            publisherString.setLength(publisherString.length() - 2);
+        }
+        publisher.setText(publisherString);
+
+        // Game video
+        findViewById(R.id.video).setVisibility(View.GONE);
+        clipGame.setVisibility(View.GONE);
+
+        // Game screenshots
+        findViewById(R.id.screen_shots).setVisibility(View.GONE);
+        viewPager.setVisibility(View.GONE);
+
     }
 
     private void setNavigationIconColorFilter() {
