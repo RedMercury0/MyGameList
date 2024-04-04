@@ -94,7 +94,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
                         android:src="@drawable/ic_star"
-                        app:tint="@color/colorcomponnent" />
+                        app:tint="@color/purple_500" />
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -163,12 +163,12 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
                         android:src="@drawable/ic_star"
-                        app:tint="@color/colorcomponnent" />
+                        app:tint="@color/purple_500" />
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
 
-                    android:id="@+id/gangerGame"
+                    android:id="@+id/genresGame"
                     android:layout_below="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                     android:layout_marginTop="5dp"
 
                     android:layout_marginBottom="5dp"
-                    android:layout_below="@+id/gangerGame"
+                    android:layout_below="@+id/genresGame"
                     android:id="@+id/info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -220,7 +220,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/productsanslight"
-                            android:text="2019/10/25"
+                            android:text="2024/04/14"
                             android:layout_marginStart="5dp"
                             android:textColor="@color/textcolorWhite"
                             android:textSize="14sp" />
@@ -307,11 +307,11 @@
                         android:layout_centerHorizontal="true"
                         android:id="@+id/btnNovaCompra"
                         android:layout_width="wrap_content"
-                        android:text="Save in my store "
+                        android:text="Add to bookmarks "
                         android:gravity="center"
                         android:textColor="@color/textcolorWhite"
                         android:drawableTint="@color/textcolorWhite"
-                        android:drawableRight="@drawable/ic_store"
+                        android:drawableRight="@drawable/baseline_bookmark_add_24"
                         android:layout_height="match_parent"/>
                     <View
                         android:background="@color/textcolorWhite"
@@ -326,11 +326,11 @@
 
                         android:id="@+id/btnNovaCompraBuy"
                         android:layout_width="wrap_content"
-                        android:text="I want buy "
+                        android:text="Remove from bookmarks"
                         android:gravity="center"
                         android:textColor="@color/textcolorWhite"
                         android:drawableTint="@color/textcolorWhite"
-                        android:drawableRight="@drawable/ic_shopping"
+                        android:drawableRight="@drawable/baseline_bookmark_remove_24"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
 
@@ -342,12 +342,3 @@
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--tools:listitem="@layout/item_screen"-->
-    <!--android:id="@+id/recyclerViewScreen"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/clipGame"-->
-    <!--android:layout_marginLeft="20dp"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:layout_marginRight="20dp" />-->

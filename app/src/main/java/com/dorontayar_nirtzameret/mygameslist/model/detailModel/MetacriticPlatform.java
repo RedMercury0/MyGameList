@@ -1,13 +1,11 @@
 package com.dorontayar_nirtzameret.mygameslist.model.detailModel;
 
-import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.*;
-
 public class MetacriticPlatform {
     private int metascore;
-    private Platform platform;
+    private Platform_Metacritic platform;
     private String url;
 
-    public MetacriticPlatform(int metascore, Platform platform, String url) {
+    public MetacriticPlatform(int metascore, Platform_Metacritic platform, String url) {
         this.metascore = metascore;
         this.platform = platform;
         this.url = url;
@@ -21,11 +19,11 @@ public class MetacriticPlatform {
         this.metascore = metascore;
     }
 
-    public Platform getPlatform() {
+    public Platform_Metacritic getPlatform() {
         return platform;
     }
 
-    public void setPlatform(Platform platform) {
+    public void setPlatform(Platform_Metacritic platform) {
         this.platform = platform;
     }
 

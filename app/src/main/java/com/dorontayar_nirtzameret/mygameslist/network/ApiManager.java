@@ -23,10 +23,9 @@ public class ApiManager {
         return apiService.getGames(dates, ordering, apiKey,page);
     }
 
-
     // Method to get game info by name
-    public static Single<InfoGame> getGameInfo(Context context, String name, String apiKey) {
-        return apiService.getGameInfo(name, apiKey);
+    public static Single<InfoGame> getGameInfo(Context context, String slug, String apiKey) {
+        return apiService.getGameInfo(slug, apiKey);
     }
     // Method to search games
     public static Single<SearchModel> searchGames(Context context, String pageSize, String query, int page, String apiKey) {

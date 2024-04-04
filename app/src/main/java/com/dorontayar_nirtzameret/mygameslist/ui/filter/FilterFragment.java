@@ -2,6 +2,7 @@ package com.dorontayar_nirtzameret.mygameslist.ui.filter;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.dorontayar_nirtzameret.mygameslist.R;
 import com.dorontayar_nirtzameret.mygameslist.adapter.FilterAdapter;
 import com.dorontayar_nirtzameret.mygameslist.adapter.GenersAdapter;
 import com.dorontayar_nirtzameret.mygameslist.adapter.PlatformAdapter;
+import com.dorontayar_nirtzameret.mygameslist.main.previewActivity.PreviewGameActivity;
+import com.dorontayar_nirtzameret.mygameslist.model.detailModel.InfoGame;
 import com.dorontayar_nirtzameret.mygameslist.model.genresModel.GenresModel;
 import com.dorontayar_nirtzameret.mygameslist.model.genresModel.GenresResult;
 import com.dorontayar_nirtzameret.mygameslist.model.platformModel.PlatformModel;
@@ -29,6 +32,7 @@ import com.dorontayar_nirtzameret.mygameslist.model.searchModel.Result;
 import com.dorontayar_nirtzameret.mygameslist.model.searchModel.SearchModel;
 import com.dorontayar_nirtzameret.mygameslist.network.ApiManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,13 +90,13 @@ public class FilterFragment extends Fragment {
     }
 
 
-
     private void initializeAdapters() {
         // Initialize FilterAdapter
         filterAdapter = new FilterAdapter(new FilterAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(Result result) {
                 // Handle item click event
+                fetchDetail(result.getSlug());
             }
         });
         // Initialize GenresAdapter with item click listener
@@ -176,7 +180,15 @@ public class FilterFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-
+    private void openPreviewActivity(InfoGame infoGame) {
+        // Start the PreviewActivity and pass necessary data
+        Intent intent = new Intent(getContext(), PreviewGameActivity.class);
+        // Serialize InfoGame object into JSON string
+        String infoGameJson = new Gson().toJson(infoGame);
+        intent.putExtra("infoGame",infoGame.getName());
+        intent.putExtra("infoGameJson", infoGameJson);
+        startActivity(intent);
+    }
     // Fetch genres data from API
     private void fetchGenres() {
         // Make API call to get genres
@@ -232,6 +244,33 @@ public class FilterFragment extends Fragment {
                 });
     }
 
+    // Fetch detailed game data from API
+    private void fetchDetail(String gameName) {
+        // Make API call to get game details
+        ApiManager.getGameInfo(getContext(),gameName, apiKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<InfoGame>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        // Disposable
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull InfoGame infoGame) {
+                        Log.e("InfoGameLOG", "fetch InfoGame ");
+                        // Open the Prewview Game Activity with the selected game details
+                        openPreviewActivity(infoGame);
+                        Log.e("InfoGameLOG", infoGame.getName());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        // Handle error
+                        Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
+                    }
+                });
+    }
 
     // Perform search based on the entered text, selected genres, and selected platforms
     private void performSearch(String searchText, int page) {
@@ -379,43 +418,7 @@ public class FilterFragment extends Fragment {
 
 
     }
-    // Perform search based on the entered text, selected genres, and selected platforms
-    private void performSearchByFilters(String searchText,String selectedPlatformsFilter,String selectedGenresFilter,int page) {
-        // Make API call to search for games with geners and platform filters
-        ApiManager.searchGamesByFilters(getContext(), "25", searchText, selectedPlatformsFilter, selectedGenresFilter, page, apiKey)
 
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<SearchModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull SearchModel searchModel) {
-                        // Update the RecyclerView with search results
-                        filterAdapter.setPosts(searchModel.getResults());
-
-                        // Clear filtering selection
-                        clearSelectedFilters();
-
-                        // Hide the LottieAnimationView and TextView
-                        hideGameFinder();
-
-                        // Dismiss the dialog if necessary
-                        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
-                            bottomSheetDialog.dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        // Handle error
-                        Log.e(TAG, "Search error: " + e.getMessage());
-                    }
-                });
-    }
     private void hideGameFinder() {
         if (avFromCode != null) {
             avFromCode.setVisibility(View.INVISIBLE);

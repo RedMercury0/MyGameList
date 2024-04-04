@@ -8,6 +8,7 @@ import com.dorontayar_nirtzameret.mygameslist.model.searchModel.SearchModel;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RawgApiService {
@@ -21,8 +22,8 @@ public interface RawgApiService {
 
 
     // Endpoint for retrieving game information by name
-    @GET("/api/games/{name}")
-    Single<InfoGame> getGameInfo(@Query("name") String name, @Query("key") String apiKey);
+    @GET("/api/games/{slug}")
+    Single<InfoGame> getGameInfo(@Path("slug") String name, @Query("key") String apiKey);
 
     // Endpoints for searching games
     @GET("/api/games")
