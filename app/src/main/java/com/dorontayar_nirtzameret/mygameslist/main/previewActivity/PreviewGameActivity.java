@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -35,10 +36,10 @@ public class PreviewGameActivity extends AppCompatActivity {
     private TextView titleGameToolbar,titleGame,
             rateGameToolbar,rateGame,releaseDate,description,platforms,genres,publisher;
 
-
+    private Button AddBookmark,RemoveBookmark;
     private InfoGame infoGame;
 
-    private Gson gson;
+    private Gson gsonGame;
     private String gameData;
     private String gameID;
     private String gameNAME;
@@ -64,10 +65,11 @@ public class PreviewGameActivity extends AppCompatActivity {
             // Deserialize JSON string back into InfoGame object
             infoGame = new Gson().fromJson(infoGameJson, InfoGame.class);
 
+
         }
 
-        // Initialize Gson
-        // gson = new Gson();
+
+
 
 
 
@@ -90,6 +92,8 @@ public class PreviewGameActivity extends AppCompatActivity {
         platforms = findViewById(R.id.platforms);
         genres = findViewById(R.id.genres);
         publisher= findViewById(R.id.publisher);
+        AddBookmark = findViewById(R.id.btnAddBookmark);
+        RemoveBookmark = findViewById(R.id.btnRemoveBookmark);
     }
 
     private void setupUI() {
@@ -167,6 +171,30 @@ public class PreviewGameActivity extends AppCompatActivity {
         // Game screenshots
         findViewById(R.id.screen_shots).setVisibility(View.GONE);
         viewPager.setVisibility(View.GONE);
+
+        // Bookmarks
+        if(true){
+            RemoveBookmark.setVisibility(View.GONE);
+            AddBookmark.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    AddBookmark.setVisibility(View.GONE);
+                    RemoveBookmark.setVisibility(View.VISIBLE);
+
+                }
+            });
+            RemoveBookmark.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    RemoveBookmark.setVisibility(View.GONE);
+                    AddBookmark.setVisibility(View.VISIBLE);
+
+                }
+            });
+
+        }
 
     }
 
