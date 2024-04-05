@@ -99,5 +99,7 @@ public class HomeFragment extends Fragment implements TopAdapter.OnClickAdapterL
     @Override
     public void onClick(Result game) {
         // Handle item click
+        homeViewModel.fetchDetail(game.getSlug());
     }
+
 }

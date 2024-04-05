@@ -1,21 +1,20 @@
 package com.dorontayar_nirtzameret.mygameslist.main.registerFragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class registerFragment extends Fragment {
 
@@ -24,6 +23,9 @@ public class registerFragment extends Fragment {
     private EditText secondPasswordEditText;
     private EditText emailEditText;
     private Button registerButton;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+
 
     private RegisterViewModel viewModel;
 
@@ -48,7 +50,7 @@ public class registerFragment extends Fragment {
         // Observe register result
         viewModel.isRegistered().observe(getViewLifecycleOwner(), isRegistered -> {
             if (isRegistered) {
-                navigateToMainFragment();
+                navigateToLoginFragment();
             } else {
                 // Handle unsuccessful register
             }
@@ -62,11 +64,26 @@ public class registerFragment extends Fragment {
         String password = passwordEditText.getText().toString();
         String secondPassword = secondPasswordEditText.getText().toString();
         String email = emailEditText.getText().toString();
-        viewModel.register(username, password, secondPassword, email);
+        if (username.isEmpty() || password.isEmpty() || secondPassword.isEmpty() || email.isEmpty()){
+            Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
+        }
+        else if(!password.equals(secondPassword)){
+            Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_LONG).show();
+        }
+        else if (password.length() < 6) {
+            Toast.makeText(getActivity(), "Password is too short ! should be longer than 6 characters", Toast.LENGTH_SHORT).show();
+        }else {
+
+            viewModel.register(username, password, email,getContext());
+        }
     }
     private void navigateToMainFragment() {
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_registerFragment_to_mainFragment);
+    }
+    private void navigateToLoginFragment() {
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_registerFragment_to_loginFragment);
     }
 }
 

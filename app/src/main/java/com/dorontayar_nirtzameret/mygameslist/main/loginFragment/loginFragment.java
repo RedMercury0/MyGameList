@@ -1,23 +1,19 @@
 package com.dorontayar_nirtzameret.mygameslist.main.loginFragment;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
 
@@ -27,6 +23,7 @@ public class loginFragment extends Fragment {
     private EditText passwordEditText;
     private Button loginButton;
     private Button registerButton;
+
 
     private LoginViewModel viewModel;
 
@@ -84,7 +81,13 @@ public class loginFragment extends Fragment {
     private void loginUser() {
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        viewModel.login(username, password);
+        if (!username.isEmpty() && !password.isEmpty()){
+            Log.w("Login","Attempting to Log in");
+            viewModel.login(username, password,getContext());
+        } else{
+            Toast.makeText(getActivity(), "Email or Password is empty!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void navigateToMainFragment() {
