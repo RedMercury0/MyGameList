@@ -1,5 +1,6 @@
 package com.dorontayar_nirtzameret.mygameslist.main.previewActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,11 @@ import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.ParentPlatfo
 import com.dorontayar_nirtzameret.mygameslist.model.detailModel.InfoGame;
 import com.dorontayar_nirtzameret.mygameslist.model.detailModel.Publisher;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -43,12 +49,19 @@ public class PreviewGameActivity extends AppCompatActivity {
     private String gameData;
     private String gameID;
     private String gameNAME;
-
+    private String user;
+    private Boolean bookmarked = false;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview_game);
+
+
+
+        // Creating FireBase DatabaseReference to access firebase realtime database
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mygamelist-androidproject-default-rtdb.firebaseio.com/");
 
         // Initialize views
         initViews();
@@ -65,7 +78,9 @@ public class PreviewGameActivity extends AppCompatActivity {
             // Deserialize JSON string back into InfoGame object
             infoGame = new Gson().fromJson(infoGameJson, InfoGame.class);
 
-
+            // Retrieve the logged user name
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            user = prefs.getString("loggedInUser", null);
         }
 
 
@@ -173,28 +188,26 @@ public class PreviewGameActivity extends AppCompatActivity {
         viewPager.setVisibility(View.GONE);
 
         // Bookmarks
-        if(true){
-            RemoveBookmark.setVisibility(View.GONE);
-            AddBookmark.setOnClickListener(new View.OnClickListener(){
+        AddBookmark.setOnClickListener(new View.OnClickListener(){
 
-                @Override
-                public void onClick(View v) {
-                    AddBookmark.setVisibility(View.GONE);
-                    RemoveBookmark.setVisibility(View.VISIBLE);
+            @Override
+            public void onClick(View v) {
+                AddBookmark.setVisibility(View.GONE);
+                RemoveBookmark.setVisibility(View.VISIBLE);
+                addBookmark(String.valueOf(infoGame.getId()));
 
-                }
-            });
-            RemoveBookmark.setOnClickListener(new View.OnClickListener(){
+            }
+        });
+        RemoveBookmark.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                RemoveBookmark.setVisibility(View.GONE);
+                AddBookmark.setVisibility(View.VISIBLE);
+                removeBookmark(String.valueOf(infoGame.getId()));
+            }
+        });
+        isBookmarked(String.valueOf(infoGame.getId()));
 
-                @Override
-                public void onClick(View v) {
-                    RemoveBookmark.setVisibility(View.GONE);
-                    AddBookmark.setVisibility(View.VISIBLE);
-
-                }
-            });
-
-        }
 
     }
 
@@ -223,6 +236,37 @@ public class PreviewGameActivity extends AppCompatActivity {
         // Handle app bar layout state changes
     }
 
+    private void isBookmarked(String gameId){
+        DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
+        userBookmarksRef.child(gameId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Bookmark exists
+                    RemoveBookmark.setVisibility(View.VISIBLE);
+                    AddBookmark.setVisibility(View.GONE);
+                } else {
+                    // Bookmark does not exist
+                    AddBookmark.setVisibility(View.VISIBLE);
+                    RemoveBookmark.setVisibility(View.GONE);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+            }
+        });
+    }
+
+    private void addBookmark(String gameId){
+        DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
+        userBookmarksRef.child(gameId).setValue(true);
+
+    }
+    private void removeBookmark(String gameId){
+        DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
+        userBookmarksRef.child(gameId).removeValue();
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.dorontayar_nirtzameret.mygameslist.main.loginFragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginViewModel extends ViewModel {
     // LiveData for authentication result
     private MutableLiveData<Boolean> isAuthenticated = new MutableLiveData<>();
-    private MutableLiveData<String> LoggedUsername = new MutableLiveData<>();
+    private MutableLiveData<String> loggedUsername = new MutableLiveData<>();
 
     // Creating FireBase DatabaseReference to access firebase realtime database
     //private FirebaseDatabase database;
@@ -43,11 +44,11 @@ public class LoginViewModel extends ViewModel {
 
                     final String getUserPassword = snapshot.child(username).child("password").getValue(String.class);
                     if(getUserPassword.equals(password)){
-                        Toast.makeText(context, "Login in", Toast.LENGTH_LONG).show();
-                        LoggedUsername.setValue(username);
+                        //Toast.makeText(context, "Login in", Toast.LENGTH_LONG).show();
+                        loggedUsername.setValue(username);
                         isAuthenticated.setValue(true);
                         Toast.makeText(context, "Welcome "+ username, Toast.LENGTH_LONG).show();
-
+                        saveLoggedInUser(username,context);
 
                     }
                     else {
@@ -72,8 +73,14 @@ public class LoginViewModel extends ViewModel {
     public LiveData<Boolean> isAuthenticated() {
         return isAuthenticated;
     }
-    public LiveData<String> LoggedUsername() {
-        return LoggedUsername;
+    public LiveData<String> getLoggedUsername() {
+        return loggedUsername;
     }
+    private void saveLoggedInUser(String username, Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
+        editor.putString("loggedInUser", username);
+        editor.apply();
+    }
+
 
 }

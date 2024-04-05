@@ -1,10 +1,7 @@
 package com.dorontayar_nirtzameret.mygameslist.main.ui.home;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,13 +9,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
-import com.dorontayar_nirtzameret.mygameslist.main.previewActivity.PreviewGameActivity;
-import com.dorontayar_nirtzameret.mygameslist.model.detailModel.InfoGame;
 import com.dorontayar_nirtzameret.mygameslist.model.popularModel.Result;
 import com.dorontayar_nirtzameret.mygameslist.model.popularModel.TopGames;
 import com.dorontayar_nirtzameret.mygameslist.network.ApiManager;
 import com.dorontayar_nirtzameret.mygameslist.utilities.NetworkState;
-import com.google.gson.Gson;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -102,42 +96,7 @@ public class HomeViewModel extends AndroidViewModel {
         return lastMonthDateStr + "," + currentDateStr;
     }
 
-    private void openPreviewActivity(InfoGame infoGame) {
-        // Start the PreviewActivity and pass necessary data
-        Intent intent = new Intent(getApplication().getApplicationContext(), PreviewGameActivity.class);
-        // Serialize InfoGame object into JSON string
-        String infoGameJson = new Gson().toJson(infoGame);
-        intent.putExtra("infoGame",infoGame.getName());
-        intent.putExtra("infoGameJson", infoGameJson);
-        getApplication().getApplicationContext().startActivity(intent);
-    }
-    // Fetch detailed game data from API
-    public void fetchDetail(String gameName) {
-        // Make API call to get game details
-        ApiManager.getGameInfo(getApplication().getApplicationContext(),gameName, apiKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<InfoGame>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
 
-                    @Override
-                    public void onSuccess(@NonNull InfoGame infoGame) {
-                        Log.e("InfoGameLOG", "fetch InfoGame ");
-                        // Open the Prewview Game Activity with the selected game details
-                        openPreviewActivity(infoGame);
-                        Log.e("InfoGameLOG", infoGame.getName());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        // Handle error
-                        Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
-                    }
-                });
-    }
 
 
 
