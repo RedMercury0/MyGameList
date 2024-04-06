@@ -1,6 +1,7 @@
 package com.dorontayar_nirtzameret.mygameslist.main.registerFragment;
 
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,8 @@ public class registerFragment extends Fragment {
         }
         else if (password.length() < 6) {
             Toast.makeText(getActivity(), "Password is too short ! should be longer than 6 characters", Toast.LENGTH_SHORT).show();
+        }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getActivity(), "Invalid email format", Toast.LENGTH_LONG).show();
         }else {
 
             viewModel.register(username, password, email,getContext());
