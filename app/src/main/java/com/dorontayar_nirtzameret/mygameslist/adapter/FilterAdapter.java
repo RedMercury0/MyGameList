@@ -1,6 +1,5 @@
 package com.dorontayar_nirtzameret.mygameslist.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
+import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.Genre;
 import com.dorontayar_nirtzameret.mygameslist.model.commonGameModel.ParentPlatform;
 import com.dorontayar_nirtzameret.mygameslist.model.searchModel.Result;
 import com.squareup.picasso.Picasso;
@@ -45,18 +45,23 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         holder.rateGameToolbar.setText(String.valueOf(model.getRating()));
 
 
-        Log.d("PLATFORM_DEBUG", "Platform Name: " + model.getParent_platforms().get(0).getPlatform().getSlug()); 
         StringBuilder platform = new StringBuilder();
         for (ParentPlatform platformItem : model.getParent_platforms()) {
-            Log.d("PLATFORM_DEBUG", "Platform Name: " + platformItem.getPlatform().getName());
             platform.append(platformItem.getPlatform().getName()).append(", ");
         }
-
         if (platform.length() > 2) {
             platform.setLength(platform.length() - 2);
         }
+        StringBuilder genres = new StringBuilder();
+        for (Genre genre : model.getGenres()) {
+            genres.append(genre.getName()).append(", ");
+        }
+        if (genres.length() > 2) {
+            genres.setLength(genres.length() - 2);
+        }
 
         holder.desc.setText(platform.toString());
+        holder.desc2.setText(genres.toString());
 
         holder.title.setSelected(true);
         holder.desc.setSelected(true);
@@ -88,7 +93,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView photoGame;
-        TextView title, rateGameToolbar, desc;
+        TextView title, rateGameToolbar, desc,desc2;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +101,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
             title = itemView.findViewById(R.id.title);
             rateGameToolbar = itemView.findViewById(R.id.rateGameToolbar);
             desc = itemView.findViewById(R.id.desc);
+            desc2 = itemView.findViewById(R.id.desc2);
         }
     }
 }
