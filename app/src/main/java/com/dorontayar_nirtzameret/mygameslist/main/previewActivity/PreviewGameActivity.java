@@ -99,6 +99,7 @@ public class PreviewGameActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         backImage = findViewById(R.id.back);
         titleGameToolbar = findViewById(R.id.titleGameToolbar);
+        titleGameToolbar.requestFocus();
         titleGame = findViewById(R.id.titleGame);
         rateGameToolbar = findViewById(R.id.rateGameToolbar);
         rateGame = findViewById(R.id.rateGame);

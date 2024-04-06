@@ -68,24 +68,24 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/cardstates">
 
+
         <TextView
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/title"
-            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
+            android:ellipsize="marquee"
             android:fontFamily="@font/productsansmedium"
-            android:text="King war" />
-
-
+            android:singleLine="true"
+            android:text="King war"
+            android:textColor="@color/purple_500"
+            android:textSize="20sp" />
 
         <TextView
 
-            android:textColor="@color/textcolorGrey"
+            android:textColor="@color/colorWhite"
             android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             android:text="Game description, Game description, Game description,
             Game description, Game description, Game description, . " />
         <TextView
-            android:textColor="@color/textcolorGrey"
+            android:textColor="@color/colorWhite"
             android:id="@+id/desc2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

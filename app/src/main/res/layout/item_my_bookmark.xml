@@ -9,7 +9,7 @@
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@color/black"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -78,7 +78,7 @@
                     android:fontFamily="@font/productsanslight"
                     android:maxLines="2"
                     android:text="GAME DESCRIPTION"
-                    android:textColor="@color/textcolorGrey" />
+                    android:textColor="@color/colorWhite" />
             </RelativeLayout>
 
             <View

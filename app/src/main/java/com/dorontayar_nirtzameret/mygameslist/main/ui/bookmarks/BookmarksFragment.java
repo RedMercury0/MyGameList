@@ -88,9 +88,8 @@ public class BookmarksFragment extends Fragment {
             }
 
             @Override
-            public void onDoubleClick(BookmarkModel result) {
-                // Handle double item click event
-            }
+            public void onDoubleClick(BookmarkModel bookmarkModel) {}
+
         });
 
 

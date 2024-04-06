@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -14,8 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.dorontayar_nirtzameret.mygameslist.R;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class registerFragment extends Fragment {
 
@@ -24,9 +23,7 @@ public class registerFragment extends Fragment {
     private EditText secondPasswordEditText;
     private EditText emailEditText;
     private Button registerButton;
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
-
+    private TextView haveAccountButton;
 
     private RegisterViewModel viewModel;
 
@@ -41,6 +38,7 @@ public class registerFragment extends Fragment {
         secondPasswordEditText = view.findViewById(R.id.editTextSecondPassword);
         emailEditText = view.findViewById(R.id.editTextEmail);
         registerButton = view.findViewById(R.id.buttonRegister);
+        haveAccountButton = view.findViewById(R.id.haveAccountButton);
 
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
@@ -48,10 +46,17 @@ public class registerFragment extends Fragment {
         // Setup click listener for register button
         registerButton.setOnClickListener(v -> registerUser());
 
+        haveAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToLoginFragment();
+            }
+        });
+
         // Observe register result
         viewModel.isRegistered().observe(getViewLifecycleOwner(), isRegistered -> {
             if (isRegistered) {
-                navigateToLoginFragment();
+                navigateToMainFragment();
             } else {
                 // Handle unsuccessful register
             }

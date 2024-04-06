@@ -38,7 +38,7 @@ public class RegisterViewModel extends ViewModel {
                     databaseReference.child("users").child(username).child("password").setValue(password);
                     databaseReference.child("users").child(username).child("phone_number").setValue(email);
 
-                    Toast.makeText(context, "Register successful!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, "Register successful!", Toast.LENGTH_LONG).show();
 
 
                     isRegistered.setValue(true);
