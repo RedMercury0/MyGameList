@@ -144,6 +144,8 @@ public class FilterFragment extends Fragment {
         bottomSheetDialog.setContentView(bottomSheetView);
 
 
+
+
         // Get the RecyclerViews for genres and platforms
         RecyclerView genresRecyclerView = bottomSheetView.findViewById(R.id.genresRec);
         RecyclerView platformsRecyclerView = bottomSheetView.findViewById(R.id.platformRec);
@@ -156,20 +158,19 @@ public class FilterFragment extends Fragment {
         genresRecyclerView.setAdapter(genersAdapter);
         platformsRecyclerView.setAdapter(platformAdapter);
 
-
+        // Get the EditText for the search bar
+        EditText searchEditText = bottomSheetView.findViewById(R.id.textInsert);
         // Set OnClickListener for the find button
         bottomSheetView.findViewById(R.id.findButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Extract search parameters from the dialog
-                EditText searchEditText = bottomSheetView.findViewById(R.id.textInsert);
                 String searchText = searchEditText.getText().toString();
 
                 // Perform search based on searchText and filters
-                if(!searchText.isEmpty()){
+                if (!searchText.isEmpty()) {
                     performSearch(searchText, 1);
                 }
-
 
                 // Dismiss the dialog
                 bottomSheetDialog.dismiss();
@@ -179,6 +180,7 @@ public class FilterFragment extends Fragment {
         // Show the bottom sheet dialog
         bottomSheetDialog.show();
     }
+
 
     private void openPreviewActivity(InfoGame infoGame) {
         // Start the PreviewActivity and pass necessary data
