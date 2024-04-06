@@ -261,7 +261,15 @@ public class PreviewGameActivity extends AppCompatActivity {
 
     private void addBookmark(String gameId){
         DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
-        userBookmarksRef.child(gameId).setValue(true);
+        //userBookmarksRef.child(gameId).setValue(true);
+        userBookmarksRef.child(gameId).child("game_id").setValue(gameId);
+        userBookmarksRef.child(gameId).child("game_name").setValue(infoGame.getName());
+        userBookmarksRef.child(gameId).child("slug").setValue(infoGame.getSlug());
+        userBookmarksRef.child(gameId).child("background_image").setValue(infoGame.getBackground_image());
+        userBookmarksRef.child(gameId).child("description").setValue(infoGame.getDescription_raw());
+        userBookmarksRef.child(gameId).child("genres").setValue(genres.getText().toString().replace("Genres: ", ""));
+        userBookmarksRef.child(gameId).child("platforms").setValue(platforms.getText().toString().replace("Platforms: ", ""));
+        userBookmarksRef.child(gameId).child("publisher").setValue(publisher.getText().toString().replace("Publisher: ", ""));
 
     }
     private void removeBookmark(String gameId){
