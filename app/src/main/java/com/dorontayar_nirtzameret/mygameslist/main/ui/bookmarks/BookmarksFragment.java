@@ -78,8 +78,6 @@ public class BookmarksFragment extends Fragment {
         super.onResume();
         getBookmarks();
     }
-
-
     private void initializeAdapters() {
         // Initialize BookmarkAdapter
         bookmarkAdapter = new BookmarkAdapter(new BookmarkAdapter.OnClickAdapterListener() {
@@ -137,7 +135,6 @@ public class BookmarksFragment extends Fragment {
                     }
                 });
     }
-
     private void getBookmarks() {
         DatabaseReference userBookmarksRef = FirebaseDatabase.getInstance().getReference("users").child(user).child("bookmarks");
         userBookmarksRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -161,7 +158,6 @@ public class BookmarksFragment extends Fragment {
             }
         });
     }
-
     private void attachSwipeToDelete() {
         // Initialize ItemTouchHelper
         ItemTouchHelper.SimpleCallback swipeToDeleteCallback = new ItemTouchHelper.SimpleCallback(
@@ -194,7 +190,6 @@ public class BookmarksFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
-
     private void removeBookmark(String gameId) {
         DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks").child(gameId);
 
@@ -210,7 +205,6 @@ public class BookmarksFragment extends Fragment {
             }
         });
     }
-
     private void removeBookmarkFromLocalList(String gameId) {
         for (int i = 0; i < bookmarkAdapter.getItemCount(); i++) {
             BookmarkModel bookmark = bookmarkAdapter.getItem(i);
