@@ -47,7 +47,7 @@ public class LoginViewModel extends ViewModel {
                         //Toast.makeText(context, "Login in", Toast.LENGTH_LONG).show();
                         loggedUsername.setValue(username);
                         isAuthenticated.setValue(true);
-                        Toast.makeText(context, "Welcome "+ username, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "Welcome "+ username, Toast.LENGTH_LONG).show();
                         saveLoggedInUser(username,context);
 
                     }
