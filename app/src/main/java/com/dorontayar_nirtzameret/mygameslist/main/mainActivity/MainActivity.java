@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean isComplete) {
                 if (isComplete) {
-                    // Data loading is complete, navigate to main fragment and load its UI
                     navigateToMainFragment();
                 }
             }
@@ -47,15 +46,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToMainFragment() {
-        // Find the NavController associated with the NavHostFragment
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
-        // Observe changes in authentication state and navigate accordingly
         observeAuthenticationState();
     }
 
+    // Checks authentication state and navigate accordingly
     private void observeAuthenticationState() {
-        // Check authentication state and navigate accordingly
         if (!isLoggedIn()) {
             navController.navigate(R.id.loginFragment);
         } else {
@@ -66,6 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLoggedIn() {
         // Check authentication state
         // Return true if user is logged in, false otherwise
-        return false; // Replace with your authentication logic
+        return false;
     }
 }

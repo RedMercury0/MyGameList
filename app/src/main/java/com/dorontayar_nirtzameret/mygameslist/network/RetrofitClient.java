@@ -14,15 +14,14 @@ public class RetrofitClient {
     private static final String BASE_URL = "https://rawg.io";
 
     public static Retrofit getClient(Context context) {
-        // Create a logging interceptor to log network requests and responses
+        // logging interceptor to log network requests and responses
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        // Add the logging interceptor to the HTTP client
+        // adding the interceptor to the client
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(loggingInterceptor);
 
-        // Build the Retrofit instance
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

@@ -16,38 +16,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginViewModel extends ViewModel {
-    // LiveData for authentication result
     private MutableLiveData<Boolean> isAuthenticated = new MutableLiveData<>();
     private MutableLiveData<String> loggedUsername = new MutableLiveData<>();
 
-    // Creating FireBase DatabaseReference to access firebase realtime database
-    //private FirebaseDatabase database;
-    //private DatabaseReference databaseReference;
+    // Reference for accessing firebase realtime database
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mygamelist-androidproject-default-rtdb.firebaseio.com/");
 
 
-    // Method to perform login
     public void login(String username, String password, Context context) {
-        //database = FirebaseDatabase.getInstance();
-        //databaseReference = database.getReference();
-
-        // Checking if the User already exists, if not then register it in the database
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener(){
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // checks if the user name exist in the database
                 if(snapshot.hasChild(username)){
-
-                    // the user exist in the database
-                    // checks if the password are correct
-
                     final String getUserPassword = snapshot.child(username).child("password").getValue(String.class);
                     if(getUserPassword.equals(password)){
-                        //Toast.makeText(context, "Login in", Toast.LENGTH_LONG).show();
                         loggedUsername.setValue(username);
                         isAuthenticated.setValue(true);
-                        //Toast.makeText(context, "Welcome "+ username, Toast.LENGTH_LONG).show();
                         saveLoggedInUser(username,context);
 
                     }

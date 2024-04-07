@@ -25,12 +25,11 @@ public class loginFragment extends Fragment {
     private Button loginButton;
     private TextView registerButton;
 
-
     private LoginViewModel viewModel;
 
     public loginFragment() {
-        // Required empty public constructor
     }
+
     public static loginFragment newInstance() {
         loginFragment fragment = new loginFragment();
 
@@ -49,24 +48,26 @@ public class loginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize UI components
+        initViews(view);
+        setupUI();
+        initViewModels();
+
+    }
+
+
+    private void initViews(View view){
         usernameEditText = view.findViewById(R.id.editTextUsername);
         passwordEditText = view.findViewById(R.id.editTextPassword);
         loginButton = view.findViewById(R.id.buttonLogin);
         registerButton = view.findViewById(R.id.buttonRegister);
-
-        // Initialize ViewModel
+    }
+    private void setupUI(){
+        loginButton.setOnClickListener(v -> loginUser());
+        registerButton.setOnClickListener(v -> navigateToRegisterFragment());
+    }
+    private void initViewModels(){
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        // Setup click listener for login button
-        loginButton.setOnClickListener(v -> loginUser());
-
-
-        // Setup click listener for register button
-        registerButton.setOnClickListener(v -> navigateToRegisterFragment());
-
-
-        // Observe login result
         viewModel.isAuthenticated().observe(getViewLifecycleOwner(), isAuthenticated -> {
             if (isAuthenticated) {
                 navigateToMainFragment();
@@ -76,15 +77,13 @@ public class loginFragment extends Fragment {
             }
         });
     }
-
-
-
     private void loginUser() {
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+
         if (!username.isEmpty() && !password.isEmpty()){
-            Log.w("Login","Attempting to Log in");
             viewModel.login(username, password,getContext());
+
         } else{
             Toast.makeText(getActivity(), "Email or Password is empty!", Toast.LENGTH_LONG).show();
         }
@@ -96,7 +95,6 @@ public class loginFragment extends Fragment {
     }
 
     private void navigateToRegisterFragment() {
-        //Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_registerFragment);
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_registerFragment);
     }
 }

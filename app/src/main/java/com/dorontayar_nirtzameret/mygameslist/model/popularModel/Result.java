@@ -37,7 +37,6 @@ public class Result implements Serializable {
     private Object user_game;
 
 
-
     public Result() {
     }
 

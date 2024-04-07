@@ -29,7 +29,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     public interface OnClickAdapterListener {
         void onClick(BookmarkModel result);
-        void onDoubleClick(BookmarkModel result); // New interface method for double click
+        void onDoubleClick(BookmarkModel result);
     }
 
     @NonNull
@@ -89,7 +89,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             title = itemView.findViewById(R.id.gameTitle);
             desc = itemView.findViewById(R.id.gameDesc);
 
-            // Setup GestureDetector
+
             gestureDetector = new GestureDetector(itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
@@ -99,7 +99,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 }
             });
 
-            // Set OnTouchListener to detect touch events
+
             itemView.setOnTouchListener(this);
         }
 

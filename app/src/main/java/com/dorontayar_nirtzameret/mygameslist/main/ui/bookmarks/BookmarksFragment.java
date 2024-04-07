@@ -57,10 +57,8 @@ public class BookmarksFragment extends Fragment {
 
         apiKey = getContext().getString(R.string.RAWG_API_KEY);
 
-        // Creating FireBase DatabaseReference to access firebase realtime database
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mygamelist-androidproject-default-rtdb.firebaseio.com/");
 
-        // Retrieve the logged user name
         SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         user = prefs.getString("loggedInUser", null);
 
@@ -78,12 +76,11 @@ public class BookmarksFragment extends Fragment {
         super.onResume();
         getBookmarks();
     }
+
     private void initializeAdapters() {
-        // Initialize BookmarkAdapter
         bookmarkAdapter = new BookmarkAdapter(new BookmarkAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(BookmarkModel bookmarkModel) {
-                // Handle item click event
                 fetchDetail(bookmarkModel.getSlug());
             }
 
@@ -93,43 +90,35 @@ public class BookmarksFragment extends Fragment {
         });
 
 
-        // Set adapter to RecyclerView
         recyclerView.setAdapter(bookmarkAdapter);
-
-        // Set RecyclerView visibility
         recyclerView.setVisibility(View.VISIBLE);
 
-
     }
+
     private void openPreviewActivity(InfoGame infoGame) {
-        // Start the PreviewActivity and pass necessary data
         Intent intent = new Intent(getContext(), PreviewGameActivity.class);
-        // Serialize InfoGame object into JSON string
+
         String infoGameJson = new Gson().toJson(infoGame);
         intent.putExtra("infoGame",infoGame.getName());
         intent.putExtra("infoGameJson", infoGameJson);
+
         startActivity(intent);
     }
     private void fetchDetail(String gameName) {
-        // Make API call to get game details
         ApiManager.getGameInfo(getContext(),gameName, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<InfoGame>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull InfoGame infoGame) {
-                        // Open the Prewview Game Activity with the selected game details
                         openPreviewActivity(infoGame);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
                     }
                 });
@@ -139,36 +128,32 @@ public class BookmarksFragment extends Fragment {
         userBookmarksRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Clear the existing list
+
                 bookmarkList.clear();
-                // Iterate through dataSnapshot.getChildren() to get all bookmarked game IDs
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Add bookmarked game to the list
                     BookmarkModel bookmarkModel = snapshot.getValue(BookmarkModel.class);
                     bookmarkList.add(bookmarkModel);
                 }
-                // Set bookmarks to the adapter
+
                 bookmarkAdapter.setPosts(bookmarkList);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
             }
         });
     }
+    // Handle the swipe-to-delete bookmark logic
     private void attachSwipeToDelete() {
-        // Initialize ItemTouchHelper
         ItemTouchHelper.SimpleCallback swipeToDeleteCallback = new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
-
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // Handle swipe-to-delete
                 int position = viewHolder.getAdapterPosition();
                 BookmarkModel bookmarkModel = bookmarkAdapter.getItems().get(position);
                 removeBookmark(bookmarkModel.getGame_id());
@@ -176,43 +161,40 @@ public class BookmarksFragment extends Fragment {
 
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                // Customize swipe-to-delete behavior (e.g., red background)
                 getDefaultUIUtil().onDraw(c, recyclerView, viewHolder.itemView, dX, dY, actionState, isCurrentlyActive);
             }
 
             @Override
             public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                // Customize swipe-to-delete behavior (e.g., red background)
                 getDefaultUIUtil().onDrawOver(c, recyclerView, viewHolder.itemView, dX, dY, actionState, isCurrentlyActive);
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
     private void removeBookmark(String gameId) {
         DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks").child(gameId);
 
-        // Remove the bookmark from the database
         userBookmarksRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     removeBookmarkFromLocalList(gameId);
                 } else {
-                    // Handle the failure to remove the bookmark from the database
+                    Log.w("Bookmarks","Failed to remove bookmark");
                 }
             }
         });
     }
+
     private void removeBookmarkFromLocalList(String gameId) {
         for (int i = 0; i < bookmarkAdapter.getItemCount(); i++) {
             BookmarkModel bookmark = bookmarkAdapter.getItem(i);
             if (bookmark.getGame_id().equals(gameId)) {
-                // Remove the bookmark from the local list
                 bookmarkAdapter.getItems().remove(i);
-                // Notify the adapter about the removal
                 bookmarkAdapter.notifyItemRemoved(i);
-                break; // Stop searching once the bookmark is found and removed
+                break;
             }
         }
     }

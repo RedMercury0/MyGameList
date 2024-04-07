@@ -58,15 +58,11 @@ public class PreviewGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview_game);
 
-
-
-        // Creating FireBase DatabaseReference to access firebase realtime database
+        // Reference for accessing firebase realtime database
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mygamelist-androidproject-default-rtdb.firebaseio.com/");
 
-        // Initialize views
         initViews();
 
-        // Get intent extras
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             gameData = extras.getString("GameData");
@@ -75,6 +71,7 @@ public class PreviewGameActivity extends AppCompatActivity {
 
             // Retrieve JSON string from the intent
             String infoGameJson = getIntent().getStringExtra("infoGameJson");
+
             // Deserialize JSON string back into InfoGame object
             infoGame = new Gson().fromJson(infoGameJson, InfoGame.class);
 
@@ -84,11 +81,6 @@ public class PreviewGameActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-        // Setup UI components and listeners
         setupUI();
     }
 
@@ -113,17 +105,13 @@ public class PreviewGameActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-
-        // Set navigation icon color filter
         setNavigationIconColorFilter();
-
-        // Setup app bar layout listener
         setupAppBarLayoutListener();
 
         // Set up views with data
+
         // Game title
         titleGameToolbar.setText(infoGame.getName());
-        //titleGame.setText(infoGame.getName());
 
         // Game image
         Picasso.get()
@@ -140,7 +128,6 @@ public class PreviewGameActivity extends AppCompatActivity {
         releaseDate.setText(infoGame.getReleased());
 
         // Game Description
-        //description.setText(infoGame.getDescription());
         description.setText(HtmlCompat.fromHtml(infoGame.getDescription(), HtmlCompat.FROM_HTML_MODE_COMPACT));
 
 
@@ -227,16 +214,15 @@ public class PreviewGameActivity extends AppCompatActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                // Handle app bar layout state changes
                 handleAppBarLayoutState(verticalOffset);
             }
         });
     }
 
     private void handleAppBarLayoutState(int verticalOffset) {
-        // Handle app bar layout state changes
     }
 
+    // Checking if the game is bookmarked already or not in the database
     private void isBookmarked(String gameId){
         DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
         userBookmarksRef.child(gameId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -255,14 +241,12 @@ public class PreviewGameActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
             }
         });
     }
 
     private void addBookmark(String gameId){
         DatabaseReference userBookmarksRef = databaseReference.child("users").child(user).child("bookmarks");
-        //userBookmarksRef.child(gameId).setValue(true);
         userBookmarksRef.child(gameId).child("game_id").setValue(gameId);
         userBookmarksRef.child(gameId).child("game_name").setValue(infoGame.getName());
         userBookmarksRef.child(gameId).child("slug").setValue(infoGame.getSlug());

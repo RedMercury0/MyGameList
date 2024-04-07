@@ -17,15 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 public class RegisterViewModel extends ViewModel {
     private MutableLiveData<Boolean> isRegistered = new MutableLiveData<>();
 
-    // Creating FireBase DatabaseReference to access firebase realtime database
-    //private FirebaseDatabase database;
-    //private DatabaseReference databaseReference;
+    // Reference for accessing firebase realtime database
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mygamelist-androidproject-default-rtdb.firebaseio.com/");
 
     public void register(String username, String password, String email, Context context) {
-        //database = FirebaseDatabase.getInstance();
-        //databaseReference = database.getReference();
-
         // Checking if the User already exists, if not then register it in the database
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -37,8 +32,6 @@ public class RegisterViewModel extends ViewModel {
                 else {
                     databaseReference.child("users").child(username).child("password").setValue(password);
                     databaseReference.child("users").child(username).child("phone_number").setValue(email);
-
-                    //Toast.makeText(context, "Register successful!", Toast.LENGTH_LONG).show();
 
 
                     isRegistered.setValue(true);

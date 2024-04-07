@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background shape with solid color -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/maincolorapp" />
         </shape>
     </item>
-    <!-- Transparent corners shape -->
     <item>
         <shape android:shape="rectangle">
             <!-- Set the corners to be transparent -->

@@ -22,7 +22,6 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
 
     public GenersAdapter(GenersAdapter.OnClickAdapterListener itemClick) {this.itemClick = itemClick;}
 
-    // Interface for item click listener
     public interface OnClickAdapterListener {
         void onClick(GenresResult game, ArrayList<GenresResult> items);
     }
@@ -32,32 +31,27 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
         return items != null ? items.size() : 0;
     }
 
-    // Setter for the list of items
     public void setPosts(List<GenresResult> items) {
         this.items = new ArrayList<>(items);
         notifyDataSetChanged();
     }
 
-    // Getter for the list of items
     public ArrayList<GenresResult> getPost() {
         return items;
     }
 
-    // Inflates the item views
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_type, parent, false);
         return new ViewHolder(view);
     }
 
-    // Binds each item in the ArrayList to a view
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final GenresResult model = items.get(position);
         holder.titleType.setText(model.getName());
         holder.titleBack.setBackgroundColor(model.isClicked() ? Color.parseColor("#c43e00") : Color.parseColor("#342A24"));
 
-        // Set click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,9 +61,7 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
         });
     }
 
-    // ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Holds the TextView that will add each picture to
         View titleBack;
         TextView titleType;
         public ViewHolder(View view) {

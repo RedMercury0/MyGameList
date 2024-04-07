@@ -20,12 +20,11 @@ public class MainViewModel extends AndroidViewModel {
         homeViewModel = new HomeViewModel(application);
     }
 
-    // Method to fetch data (preloading)
+    // Fetching data (preloading)
     public void preloadData() {
         homeViewModel.fetchTopGames(1);
         homeViewModel.fetchLatestGames(1);
 
-        // Set the data loading complete flag to true
         dataLoadingComplete.setValue(true);
     }
     public LiveData<Boolean> getDataLoadingComplete() {

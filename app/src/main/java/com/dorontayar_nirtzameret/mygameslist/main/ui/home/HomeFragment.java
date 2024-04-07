@@ -51,13 +51,9 @@ public class HomeFragment extends Fragment implements TopAdapter.OnClickAdapterL
         // Get api key
         apiKey = getContext().getString(R.string.RAWG_API_KEY);
 
-        // Initialize ApiManager
-        //ApiManager.initialize(requireContext());
-
         // Initialize the ViewModel
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        // Observe LiveData for top games
         homeViewModel.getTopGames().observe(getViewLifecycleOwner(), new Observer<List<Result>>() {
             @Override
             public void onChanged(List<Result> results) {
@@ -65,7 +61,6 @@ public class HomeFragment extends Fragment implements TopAdapter.OnClickAdapterL
             }
         });
 
-        // Observe LiveData for latest games
         homeViewModel.getLatestGames().observe(getViewLifecycleOwner(), new Observer<List<Result>>() {
             @Override
             public void onChanged(List<Result> results) {
@@ -76,7 +71,6 @@ public class HomeFragment extends Fragment implements TopAdapter.OnClickAdapterL
         setupTopRecyclerView();
         setupLatestRecyclerView();
 
-        // Check for network connectivity before making network requests
         if (NetworkState.isNetworkAvailable(requireContext())) {
             homeViewModel.fetchTopGames(1);
             homeViewModel.fetchLatestGames(1);
@@ -115,40 +109,30 @@ public class HomeFragment extends Fragment implements TopAdapter.OnClickAdapterL
 
     @Override
     public void onClick(Result game) {
-        // Handle item click
         fetchDetail(game.getSlug());
     }
     private void openPreviewActivity(InfoGame infoGame) {
-        // Start the PreviewActivity and pass necessary data
         Intent intent = new Intent(getContext(), PreviewGameActivity.class);
         // Serialize InfoGame object into JSON string
         String infoGameJson = new Gson().toJson(infoGame);
         intent.putExtra("infoGameJson", infoGameJson);
         startActivity(intent);
     }
-    // Fetch detailed game data from API
     public void fetchDetail(String gameName) {
-        // Make API call to get game details
         ApiManager.getGameInfo(getContext(),gameName, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<InfoGame>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull InfoGame infoGame) {
-                        Log.e("InfoGameLOG", "fetch InfoGame ");
-                        // Open the Prewview Game Activity with the selected game details
                         openPreviewActivity(infoGame);
-                        Log.e("InfoGameLOG", infoGame.getName());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
                     }
                 });

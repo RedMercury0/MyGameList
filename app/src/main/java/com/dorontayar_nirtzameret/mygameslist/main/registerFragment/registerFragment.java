@@ -1,6 +1,7 @@
 package com.dorontayar_nirtzameret.mygameslist.main.registerFragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,15 @@ public class registerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
-        // Initialize UI components
+
+        initViews(view);
+        setupUI();
+        initViewModels();
+
+
+        return view;
+    }
+    private void initViews(View view){
         usernameEditText = view.findViewById(R.id.editTextUsername);
         passwordEditText = view.findViewById(R.id.editTextPassword);
         secondPasswordEditText = view.findViewById(R.id.editTextSecondPassword);
@@ -40,10 +49,8 @@ public class registerFragment extends Fragment {
         registerButton = view.findViewById(R.id.buttonRegister);
         haveAccountButton = view.findViewById(R.id.haveAccountButton);
 
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-
-        // Setup click listener for register button
+    }
+    private void setupUI(){
         registerButton.setOnClickListener(v -> registerUser());
 
         haveAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -53,18 +60,20 @@ public class registerFragment extends Fragment {
             }
         });
 
+    }
+    private void initViewModels(){
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+
+
         // Observe register result
         viewModel.isRegistered().observe(getViewLifecycleOwner(), isRegistered -> {
             if (isRegistered) {
                 navigateToMainFragment();
             } else {
-                // Handle unsuccessful register
+                Log.w("Register","Failed to register user");
             }
         });
-
-        return view;
     }
-
     private void registerUser() {
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();

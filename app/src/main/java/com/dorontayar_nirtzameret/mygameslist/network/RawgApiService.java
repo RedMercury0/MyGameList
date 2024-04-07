@@ -20,7 +20,6 @@ public interface RawgApiService {
                               @Query("key") String apiKey,
                               @Query("page") int page);
 
-
     // Endpoint for retrieving game information by name
     @GET("/api/games/{slug}")
     Single<InfoGame> getGameInfo(@Path("slug") String name, @Query("key") String apiKey);

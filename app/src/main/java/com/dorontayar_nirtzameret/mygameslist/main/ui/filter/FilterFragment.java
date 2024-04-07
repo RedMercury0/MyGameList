@@ -55,7 +55,7 @@ public class FilterFragment extends Fragment {
     private List<PlatformResult> selectedPlatforms = new ArrayList<>();
 
     public FilterFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -64,8 +64,6 @@ public class FilterFragment extends Fragment {
 
         apiKey = getContext().getString(R.string.RAWG_API_KEY);
 
-
-        // Fetch genres and platforms data from API
         fetchGenres();
         fetchPlatforms();
 
@@ -73,12 +71,11 @@ public class FilterFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         initializeAdapters();
-        Log.d(TAG, "Adapters initialized.");
 
         avFromCode = view.findViewById(R.id.av_from_code);
         gameFind = view.findViewById(R.id.gameFind);
 
-        // Set OnClickListener for the search icon
+
         view.findViewById(R.id.filterOpen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +86,8 @@ public class FilterFragment extends Fragment {
         return view;
     }
 
-
+    // Initialize FilterAdapter, GenresAdapter, PlatformAdapter
     private void initializeAdapters() {
-        // Initialize FilterAdapter
         filterAdapter = new FilterAdapter(new FilterAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(Result result) {
@@ -99,34 +95,29 @@ public class FilterFragment extends Fragment {
                 fetchDetail(result.getSlug());
             }
         });
-        // Initialize GenresAdapter with item click listener
+
         genersAdapter = new GenersAdapter(new GenersAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(GenresResult item, ArrayList<GenresResult> items) {
-                // Handle item click event for genres
                 item.setClicked(!item.isClicked());
                 onGenreClicked(item);
-                // Notify the adapter of the dataset change
+
                 genersAdapter.notifyDataSetChanged();
             }
         });
 
-        // Initialize PlatformAdapter
         platformAdapter = new PlatformAdapter(new PlatformAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(PlatformResult item, ArrayList<PlatformResult> items) {
-                // Handle item click event for platform
                 item.setClicked(!item.isClicked());
                 onPlatformClicked(item);
-                // Notify the adapter of the dataset change
+
                 platformAdapter.notifyDataSetChanged();
             }
         });
 
-        // Set adapter to RecyclerView
+        // Setting the adapter to the RecyclerView
         recyclerView.setAdapter(filterAdapter);
-
-        // Set RecyclerView visibility
         recyclerView.setVisibility(View.VISIBLE);
 
 
@@ -134,28 +125,19 @@ public class FilterFragment extends Fragment {
 
     // Open the bottom sheet dialog for searching
     private void openBottomSheetDialog() {
-        // Inflate the bottom sheet layout
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottomsheetdialog, null);
-
-        // Create the bottom sheet dialog
         bottomSheetDialog = new BottomSheetDialog(requireContext());
-
-        // Set the content view for the bottom sheet dialog
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        // Get the RecyclerViews for genres and platforms
         RecyclerView genresRecyclerView = bottomSheetView.findViewById(R.id.genresRec);
         RecyclerView platformsRecyclerView = bottomSheetView.findViewById(R.id.platformRec);
 
-        // Set LayoutManager for RecyclerViews
         genresRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         platformsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        // Set adapters to RecyclerViews
         genresRecyclerView.setAdapter(genersAdapter);
         platformsRecyclerView.setAdapter(platformAdapter);
 
-        // Set OnClickListener for the find button
         bottomSheetView.findViewById(R.id.findButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,103 +150,85 @@ public class FilterFragment extends Fragment {
                     performSearch(searchText, 1);
                 }
 
-                // Dismiss the dialog
+                // Dismiss the dialog after search is done
                 bottomSheetDialog.dismiss();
             }
         });
 
-        // Show the bottom sheet dialog
         bottomSheetDialog.show();
     }
 
-
+    // Start the PreviewActivity and pass necessary data
     private void openPreviewActivity(InfoGame infoGame) {
-        // Start the PreviewActivity and pass necessary data
         Intent intent = new Intent(getContext(), PreviewGameActivity.class);
+
         // Serialize InfoGame object into JSON string
         String infoGameJson = new Gson().toJson(infoGame);
         intent.putExtra("infoGame",infoGame.getName());
         intent.putExtra("infoGameJson", infoGameJson);
+
         startActivity(intent);
     }
-    // Fetch genres data from API
+    // Fetch genres data from the API
     private void fetchGenres() {
-        // Make API call to get genres
         ApiManager.getGenres(getContext(), apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<GenresModel>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull GenresModel genresModel) {
-                        // Update GenersAdapter with genres data
                         genersAdapter.setPosts(genresModel.getResults());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Failed to fetch genres: " + e.getMessage());
                     }
                 });
     }
 
-    // Fetch platforms data from API
+    // Fetch platforms data from the API
     private void fetchPlatforms() {
-        // Make API call to get platforms
+
         ApiManager.getPlatforms(getContext(), apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<PlatformModel>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull PlatformModel platformModel) {
-                        Log.e("platformLOG", "fetch platforms ");
-                        // Update PlatformAdapter with platforms data
                         platformAdapter.setPosts(platformModel.getResults());
-                        List<PlatformResult> listResultsPlat =platformModel.getResults();
-                        Log.e("platformLOG", listResultsPlat.get(1).getName());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
                     }
                 });
     }
 
-    // Fetch detailed game data from API
+    // Fetch detailed game data from the API
     private void fetchDetail(String gameName) {
-        // Make API call to get game details
         ApiManager.getGameInfo(getContext(),gameName, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<InfoGame>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull InfoGame infoGame) {
-                        Log.e("InfoGameLOG", "fetch InfoGame ");
                         // Open the Prewview Game Activity with the selected game details
                         openPreviewActivity(infoGame);
-                        Log.e("InfoGameLOG", infoGame.getName());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Failed to fetch platforms: " + e.getMessage());
                     }
                 });
@@ -272,8 +236,6 @@ public class FilterFragment extends Fragment {
 
     // Perform search based on the entered text, selected genres, and selected platforms
     private void performSearch(String searchText, int page) {
-        // Make API call to search for games
-
         if (selectedGenres.isEmpty() && selectedPlatforms.isEmpty()){
             ApiManager.searchGames(getContext(), "25", searchText,page, apiKey)
 
@@ -281,22 +243,16 @@ public class FilterFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<SearchModel>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        // Disposable
-                    }
+                    public void onSubscribe(@NonNull Disposable d) {}
 
                     @Override
                     public void onSuccess(@NonNull SearchModel searchModel) {
-                        // Update the RecyclerView with search results
                         filterAdapter.setPosts(searchModel.getResults());
 
-                        // Clear filtering selection
                         clearSelectedFilters();
 
-                        // Hide the LottieAnimationView and TextView
                         hideGameFinder();
 
-                        // Dismiss the dialog if necessary
                         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
                             bottomSheetDialog.dismiss();
                         }
@@ -317,22 +273,16 @@ public class FilterFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<SearchModel>() {
                         @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-                            // Disposable
-                        }
+                        public void onSubscribe(@NonNull Disposable d) {}
 
                         @Override
                         public void onSuccess(@NonNull SearchModel searchModel) {
-                            // Update the RecyclerView with search results
                             filterAdapter.setPosts(searchModel.getResults());
 
-                            // Clear filtering selection
                             clearSelectedFilters();
 
-                            // Hide the LottieAnimationView and TextView
                             hideGameFinder();
 
-                            // Dismiss the dialog if necessary
                             if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
                                 bottomSheetDialog.dismiss();
                             }
@@ -351,22 +301,17 @@ public class FilterFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<SearchModel>() {
                         @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-                            // Disposable
-                        }
+                        public void onSubscribe(@NonNull Disposable d) {}
 
                         @Override
                         public void onSuccess(@NonNull SearchModel searchModel) {
                             // Update the RecyclerView with search results
                             filterAdapter.setPosts(searchModel.getResults());
 
-                            // Clear filtering selection
                             clearSelectedFilters();
 
-                            // Hide the LottieAnimationView and TextView
                             hideGameFinder();
 
-                            // Dismiss the dialog if necessary
                             if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
                                 bottomSheetDialog.dismiss();
                             }
@@ -385,22 +330,16 @@ public class FilterFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<SearchModel>() {
                         @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-                            // Disposable
-                        }
+                        public void onSubscribe(@NonNull Disposable d) {}
 
                         @Override
                         public void onSuccess(@NonNull SearchModel searchModel) {
-                            // Update the RecyclerView with search results
                             filterAdapter.setPosts(searchModel.getResults());
 
-                            // Clear filtering selection
                             clearSelectedFilters();
 
-                            // Hide the LottieAnimationView and TextView
                             hideGameFinder();
 
-                            // Dismiss the dialog if necessary
                             if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
                                 bottomSheetDialog.dismiss();
                             }
@@ -408,7 +347,6 @@ public class FilterFragment extends Fragment {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            // Handle error
                             Log.e(TAG, "Search error: " + e.getMessage());
                         }
                     });
@@ -417,6 +355,7 @@ public class FilterFragment extends Fragment {
 
     }
 
+    // Hide the Game Finder animation
     private void hideGameFinder() {
         if (avFromCode != null) {
             avFromCode.setVisibility(View.INVISIBLE);
@@ -465,7 +404,7 @@ public class FilterFragment extends Fragment {
         return platformsString.toString();
     }
 
-    // Clear all selected items
+    // Clear all selected items in the filter
     private void clearSelectedFilters() {
         if (genersAdapter != null) {
             selectedGenres.clear();

@@ -11,9 +11,7 @@ public class BookmarkModel {
     private String game_id;
     private String slug;
 
-    // Default constructor
     public BookmarkModel() {
-        // Required empty constructor for Firebase
     }
     public BookmarkModel(String description, String background_image, String genres, String platforms, String publisher, String game_name,String game_id,String slug) {
         this.description = description;
