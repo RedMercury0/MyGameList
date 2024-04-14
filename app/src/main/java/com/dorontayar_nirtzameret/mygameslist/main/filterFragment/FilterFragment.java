@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.main.ui.filter;
+package com.dorontayar_nirtzameret.mygameslist.main.filterFragment;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -91,7 +91,6 @@ public class FilterFragment extends Fragment {
         filterAdapter = new FilterAdapter(new FilterAdapter.OnClickAdapterListener() {
             @Override
             public void onClick(Result result) {
-                // Handle item click event
                 fetchDetail(result.getSlug());
             }
         });
@@ -101,7 +100,6 @@ public class FilterFragment extends Fragment {
             public void onClick(GenresResult item, ArrayList<GenresResult> items) {
                 item.setClicked(!item.isClicked());
                 onGenreClicked(item);
-
                 genersAdapter.notifyDataSetChanged();
             }
         });
@@ -111,12 +109,10 @@ public class FilterFragment extends Fragment {
             public void onClick(PlatformResult item, ArrayList<PlatformResult> items) {
                 item.setClicked(!item.isClicked());
                 onPlatformClicked(item);
-
                 platformAdapter.notifyDataSetChanged();
             }
         });
 
-        // Setting the adapter to the RecyclerView
         recyclerView.setAdapter(filterAdapter);
         recyclerView.setVisibility(View.VISIBLE);
 
@@ -141,16 +137,12 @@ public class FilterFragment extends Fragment {
         bottomSheetView.findViewById(R.id.findButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Extract search parameters from the dialog
                 EditText searchEditText = bottomSheetView.findViewById(R.id.textInsert);
                 String searchText = searchEditText.getText().toString();
 
-                // Perform search based on searchText and filters
-                if (!searchText.isEmpty()) {
-                    performSearch(searchText, 1);
-                }
+                //if (!searchText.isEmpty()) {performSearch(searchText, 1);}
+                performSearch(searchText, 1);
 
-                // Dismiss the dialog after search is done
                 bottomSheetDialog.dismiss();
             }
         });
@@ -169,6 +161,7 @@ public class FilterFragment extends Fragment {
 
         startActivity(intent);
     }
+
     // Fetch genres data from the API
     private void fetchGenres() {
         ApiManager.getGenres(getContext(), apiKey)
@@ -223,7 +216,6 @@ public class FilterFragment extends Fragment {
 
                     @Override
                     public void onSuccess(@NonNull InfoGame infoGame) {
-                        // Open the Prewview Game Activity with the selected game details
                         openPreviewActivity(infoGame);
                     }
 
@@ -260,7 +252,6 @@ public class FilterFragment extends Fragment {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        // Handle error
                         Log.e(TAG, "Search error: " + e.getMessage());
                     }
                 });
@@ -305,7 +296,6 @@ public class FilterFragment extends Fragment {
 
                         @Override
                         public void onSuccess(@NonNull SearchModel searchModel) {
-                            // Update the RecyclerView with search results
                             filterAdapter.setPosts(searchModel.getResults());
 
                             clearSelectedFilters();
@@ -319,7 +309,6 @@ public class FilterFragment extends Fragment {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            // Handle error
                             Log.e(TAG, "Search error: " + e.getMessage());
                         }
                     });
@@ -390,6 +379,7 @@ public class FilterFragment extends Fragment {
         if (genresString.length() > 0) {
             genresString.setLength(genresString.length() - 2);
         }
+        Log.w("FilterFragment","Genres ID selected: "+genresString.toString());
         return genresString.toString();
     }
 
@@ -401,6 +391,7 @@ public class FilterFragment extends Fragment {
         if (platformsString.length() > 0) {
             platformsString.setLength(platformsString.length() - 2);
         }
+        Log.w("FilterFragment","Platforms ID selected: "+platformsString.toString());
         return platformsString.toString();
     }
 

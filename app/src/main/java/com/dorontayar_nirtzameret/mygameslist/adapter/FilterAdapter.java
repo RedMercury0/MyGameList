@@ -69,7 +69,6 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         Picasso.get()
                 .load(model.getBackground_image())
                 .resize(750, 500)
-                //Todo add error loading
                 .into(holder.photoGame);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

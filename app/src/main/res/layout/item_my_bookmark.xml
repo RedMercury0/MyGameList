@@ -65,7 +65,7 @@
                     android:fontFamily="@font/productsansmedium"
                     android:singleLine="true"
                     android:text="Elden Ring"
-                    android:textColor="@color/purple_500"
+                    android:textColor="@color/colorWhite"
                     android:textSize="14sp" />
 
                 <TextView

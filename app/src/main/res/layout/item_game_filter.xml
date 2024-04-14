@@ -80,7 +80,7 @@
             android:fontFamily="@font/productsansmedium"
             android:singleLine="true"
             android:text="King war"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/colorWhite"
             android:textSize="20sp" />
 
         <TextView

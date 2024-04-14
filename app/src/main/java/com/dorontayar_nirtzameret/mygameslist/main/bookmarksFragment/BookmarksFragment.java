@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.main.ui.bookmarks;
+package com.dorontayar_nirtzameret.mygameslist.main.bookmarksFragment;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 

@@ -1,4 +1,4 @@
-package com.dorontayar_nirtzameret.mygameslist.main.ui.home;
+package com.dorontayar_nirtzameret.mygameslist.main.homeFragment;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 

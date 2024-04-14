@@ -50,7 +50,7 @@ public class GenersAdapter extends RecyclerView.Adapter<GenersAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         final GenresResult model = items.get(position);
         holder.titleType.setText(model.getName());
-        holder.titleBack.setBackgroundColor(model.isClicked() ? Color.parseColor("#c43e00") : Color.parseColor("#342A24"));
+        holder.titleBack.setBackgroundColor(model.isClicked() ? Color.parseColor("#FF6200EE") : Color.parseColor("#53575F"));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

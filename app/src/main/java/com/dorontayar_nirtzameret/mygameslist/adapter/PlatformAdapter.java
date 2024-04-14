@@ -49,22 +49,15 @@ public class PlatformAdapter extends RecyclerView.Adapter<PlatformAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PlatformResult model = items.get(position);
+        final PlatformResult model = items.get(position);
         holder.titleType.setText(model.getName());
+        holder.titleBack.setBackgroundColor(model.isClicked() ? Color.parseColor("#FF6200EE") : Color.parseColor("#53575F"));
 
-        if (model.isClicked()) {
-            holder.titleBack.setBackgroundColor(Color.parseColor("#c43e00"));
-        } else {
-            holder.titleBack.setBackgroundColor(Color.parseColor("#342A24"));
-        }
-
-        holder.itemView.setOnClickListener(view -> {
-            itemClick.onClick(model, items);
-            System.out.println("CLICK");
-            if (model.isClicked()) {
-                holder.titleBack.setBackgroundColor(Color.parseColor("#c43e00"));
-            } else {
-                holder.titleBack.setBackgroundColor(Color.parseColor("#342A24"));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClick.onClick(model, items);
+                notifyDataSetChanged();
             }
         });
     }
