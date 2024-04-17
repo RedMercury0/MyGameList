@@ -58,6 +58,10 @@ public class LoginViewModel extends ViewModel {
     public LiveData<Boolean> isAuthenticated() {
         return isAuthenticated;
     }
+    public void removeAuthentication() {
+         isAuthenticated.setValue(false);
+    }
+
     public LiveData<String> getLoggedUsername() {
         return loggedUsername;
     }

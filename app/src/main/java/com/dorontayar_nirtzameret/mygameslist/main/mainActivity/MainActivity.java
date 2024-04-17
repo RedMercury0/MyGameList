@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigateToMainFragment() {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        observeAuthenticationState();
+        //observeAuthenticationState();
     }
 
     // Checks authentication state and navigate accordingly
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isLoggedIn() {
         // Check authentication state
-        // Return true if user is logged in, false otherwise
+        // left for future use
         return false;
     }
 }

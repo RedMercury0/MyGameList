@@ -72,6 +72,7 @@ public class loginFragment extends Fragment {
             if (isAuthenticated) {
                 navigateToMainFragment();
                 Log.w("user login", "login success");
+                viewModel.removeAuthentication();
             } else {
                 Log.w("user login", "login fail");
             }

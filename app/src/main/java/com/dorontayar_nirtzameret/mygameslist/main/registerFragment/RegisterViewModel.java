@@ -31,7 +31,7 @@ public class RegisterViewModel extends ViewModel {
                 }
                 else {
                     databaseReference.child("users").child(username).child("password").setValue(password);
-                    databaseReference.child("users").child(username).child("phone_number").setValue(email);
+                    databaseReference.child("users").child(username).child("email").setValue(email);
 
 
                     isRegistered.setValue(true);
