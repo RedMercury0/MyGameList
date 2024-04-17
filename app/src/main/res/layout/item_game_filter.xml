@@ -46,7 +46,7 @@
         android:fontFamily="@font/productsansmedium"
 
         android:text="9.7"
-        android:textColor="@color/coloryellow"
+        android:textColor="@color/purple_500"
         android:textSize="12sp" />
 
     <ImageView
@@ -57,7 +57,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_star"
-        app:tint="@color/coloryellow" />
+        app:tint="@color/purple_500" />
 
 
     <RelativeLayout
