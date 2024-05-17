@@ -117,7 +117,6 @@ public class PreviewGameActivity extends AppCompatActivity {
         Picasso.get()
                 .load(infoGame.getBackground_image())
                 .resize(750, 500)
-                //Todo add error loading
                 .into(backImage);
 
         // Game rating
