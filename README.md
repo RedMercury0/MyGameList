@@ -2,7 +2,7 @@
 
 [Youtube](https://www.youtube.com/u_5yq16xLSA)
 
-![DemoShort-ezgif com-video-to-gif-converter (1)](https://github.com/dorontayar/MyGamesList/assets/113708110/0c90f60f-2921-49f2-acc8-49d88cb3df70)
+![DemoShort](https://github.com/dorontayar/MyGamesList/assets/113708110/c94e1733-792f-43b5-94ed-76870e341d99)
 
 
 
